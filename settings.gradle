@@ -1,0 +1,2 @@
+include ':app'
+rootProject.name = "ICM_Projeto1_93179_93391"
