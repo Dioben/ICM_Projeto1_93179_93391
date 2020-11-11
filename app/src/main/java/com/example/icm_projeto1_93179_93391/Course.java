@@ -1,8 +1,9 @@
+package com.example.icm_projeto1_93179_93391;
+
+import com.example.icm_projeto1_93179_93391.CourseNode;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.text.SimpleDateFormat;
-import java.time.Duration;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -21,7 +22,7 @@ public class Course {
         this.user=user;
         nodes = new ArrayList<>();
     }
-    
+
     public void append_node(CourseNode x){
         //your validation here
         if (x.getVelocity()>max_speed)

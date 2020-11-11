@@ -1,8 +1,8 @@
+package com.example.icm_projeto1_93179_93391;
+
 import android.location.Location;
 
 import com.google.android.gms.maps.model.LatLng;
-
-import java.time.Duration;
 
 public class CourseNode {
     private Location location;
