@@ -30,7 +30,7 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".TrackingActivity"
+            android:name=".ui.TrackingActivity"
             android:label="@string/title_activity_tracking" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -38,7 +38,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".main_menu" >
+        <activity android:name=".ui.main_menu" >
             <!--
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -47,7 +47,7 @@
             </intent-filter>
             -->
         </activity>
-        <activity android:name=".MainActivity" >
+        <activity android:name=".ui.MainActivity" >
 
             <!--
         -<intent-filter>

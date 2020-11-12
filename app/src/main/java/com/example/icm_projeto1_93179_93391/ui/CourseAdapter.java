@@ -1,4 +1,4 @@
-package com.example.icm_projeto1_93179_93391;
+package com.example.icm_projeto1_93179_93391.ui;
 
 import android.app.Activity;
 import android.content.Context;
@@ -7,8 +7,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.icm_projeto1_93179_93391.R;
+import com.example.icm_projeto1_93179_93391.datamodel.Course;
 
 import java.util.List;
 

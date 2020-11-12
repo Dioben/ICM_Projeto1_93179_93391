@@ -1,4 +1,4 @@
-package com.example.icm_projeto1_93179_93391;
+package com.example.icm_projeto1_93179_93391.ui;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
@@ -6,12 +6,14 @@ import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
-import android.graphics.Point;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
+import com.example.icm_projeto1_93179_93391.R;
+import com.example.icm_projeto1_93179_93391.UpdateCourseTask;
+import com.example.icm_projeto1_93179_93391.datamodel.Course;
+import com.example.icm_projeto1_93179_93391.datamodel.CourseNode;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -24,12 +26,10 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
-import com.google.android.gms.maps.model.PolylineOptions;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class TrackingActivity extends FragmentActivity implements OnMapReadyCallback,MapUpdater{
+public class TrackingActivity extends FragmentActivity implements OnMapReadyCallback, MapUpdater {
     private Course course;
     private boolean isrecording;
     public GoogleMap mMap;

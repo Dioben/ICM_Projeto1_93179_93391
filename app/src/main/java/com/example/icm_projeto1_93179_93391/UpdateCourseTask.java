@@ -3,12 +3,13 @@ package com.example.icm_projeto1_93179_93391;
 import android.location.Location;
 import android.os.AsyncTask;
 
-import com.google.android.gms.location.LocationCallback;
+import com.example.icm_projeto1_93179_93391.datamodel.Course;
+import com.example.icm_projeto1_93179_93391.datamodel.CourseNode;
+import com.example.icm_projeto1_93179_93391.ui.MapUpdater;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class UpdateCourseTask extends AsyncTask<Location,Void, List<LatLng>> {
     Course course;
