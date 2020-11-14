@@ -32,11 +32,11 @@
         <activity
             android:name=".ui.TrackingActivity"
             android:label="@string/title_activity_tracking" >
-            <intent-filter>
+           <!-- <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            </intent-filter>-->
         </activity>
         <activity android:name=".ui.main_menu" >
             <!--
@@ -47,15 +47,13 @@
             </intent-filter>
             -->
         </activity>
-        <activity android:name=".ui.MainActivity" >
+        <activity android:name=".ui.MainActivity"
+            android:theme="@style/NoActionBarTheme.ICM_Projeto1_93179_93391">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-            <!--
-        -<intent-filter>
-        <action android:name="android.intent.action.MAIN" />
-
-            <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            -->
         </activity>
     </application>
 

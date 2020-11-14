@@ -20,13 +20,13 @@ public class Course {
     private boolean iscopy;
 
 
-    Course(){}
-    Course(String user){
+    public Course(){}
+    public Course(String user){
         this.user=user;
         this.course_id=user;
         nodes = new ArrayList<>();
     }
-    Course(String user,String ID){
+    public Course(String user,String ID){
         this.user=user;
         nodes = new ArrayList<>();
         course_id = ID; //
