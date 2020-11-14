@@ -28,32 +28,37 @@
         android:layout_width="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginBottom="50dp">
+
         <Button
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:id="@+id/free_play"
             android:text="Free Play"
-            android:layout_marginBottom="5dp"></Button>
+            android:layout_marginBottom="5dp"
+            android:onClick="free_play_onClick"/>
+
         <Button
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:id="@+id/courses"
             android:text="Courses"
-            android:layout_marginBottom="5dp"></Button>
+            android:layout_marginBottom="5dp" />
+
         <Button
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:id="@+id/user_stats"
             android:text="User Stats"
-            android:layout_marginBottom="5dp"></Button>
+            android:layout_marginBottom="5dp" />
+
         <Button
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:id="@+id/friends"
-            android:text="Friends"></Button>
+            android:text="Friends" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

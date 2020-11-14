@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    tools:context=".ui.TrackingPopupActivity"
+    android:background="?attr/colorOnPrimary"
+    android:minWidth="300dp"
+    android:padding="16dp">
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/course_name_box"
+        android:layout_width="268dp"
+        android:layout_height="wrap_content"
+        android:hint="Course name:"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent">
+        <!-- width is 268 because match_parent wasn't working-->
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/course_name_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.button.MaterialButtonToggleGroup
+        android:id="@+id/privacy_button_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:singleSelection="true"
+        app:selectionRequired="true"
+        app:layout_constraintTop_toBottomOf="@id/course_name_box"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="8dp">
+        <Button
+            android:id="@+id/privacy_private_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Private"
+            style="?attr/materialButtonOutlinedStyle"
+            />
+<!--        <Button-->
+<!--            android:id="@+id/privacy_friend_button"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="Friend only"-->
+<!--            style="?attr/materialButtonOutlinedStyle"-->
+<!--            />-->
+        <Button
+            android:id="@+id/privacy_public_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Public"
+            style="?attr/materialButtonOutlinedStyle"
+            />
+    </com.google.android.material.button.MaterialButtonToggleGroup>
+
+    <CheckBox
+        android:id="@+id/anonymous_checkbox"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:checked="false"
+        android:text="Anonymous"
+        android:buttonTint="?attr/colorPrimary"
+        app:layout_constraintTop_toBottomOf="@id/privacy_button_bar"
+        app:layout_constraintLeft_toLeftOf="parent"
+        />
+
+    <CheckBox
+        android:id="@+id/tournament_checkbox"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:checked="false"
+        android:text="Tournament"
+        android:buttonTint="?attr/colorPrimary"
+        app:layout_constraintTop_toBottomOf="@id/anonymous_checkbox"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constrainedWidth="true"
+        />
+
+    <Button
+        android:id="@+id/confirm_upload_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Confirm"
+        app:layout_constraintTop_toBottomOf="@id/tournament_checkbox"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:onClick="confirm_upload_button_onClick"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.icm_projeto1_93179_93391" >
-
+    package="com.example.icm_projeto1_93179_93391">
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
          Google Maps Android API v2, but you must specify either coarse or fine
@@ -15,8 +14,8 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.ICM_Projeto1_93179_93391" >
-
+        android:theme="@style/Theme.ICM_Projeto1_93179_93391">
+        <activity android:name=".ui.TrackingPopupActivity"></activity>
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -31,14 +30,26 @@
 
         <activity
             android:name=".ui.TrackingActivity"
-            android:label="@string/title_activity_tracking" >
-           <!-- <intent-filter>
+            android:label="@string/title_activity_tracking"
+            android:parentActivityName=".ui.main_menu"
+            android:theme="@style/NoActionBarTheme.ICM_Projeto1_93179_93391">
+            <!--<intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>-->
         </activity>
-        <activity android:name=".ui.main_menu" >
+        <activity android:name=".ui.main_menu">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ui.MainActivity"
+            android:theme="@style/NoActionBarTheme.ICM_Projeto1_93179_93391">
+
             <!--
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -46,14 +57,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
             -->
-        </activity>
-        <activity android:name=".ui.MainActivity"
-            android:theme="@style/NoActionBarTheme.ICM_Projeto1_93179_93391">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
     </application>
 
