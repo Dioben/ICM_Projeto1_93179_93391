@@ -14,6 +14,8 @@ import com.example.icm_projeto1_93179_93391.R;
 import com.example.icm_projeto1_93179_93391.UpdateCourseTask;
 import com.example.icm_projeto1_93179_93391.datamodel.Course;
 import com.example.icm_projeto1_93179_93391.datamodel.CourseNode;
+import com.example.icm_projeto1_93179_93391.network.CourseSubmitListener;
+import com.example.icm_projeto1_93179_93391.network.FirebaseQueryClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -29,7 +31,7 @@ import com.google.android.gms.maps.model.Polyline;
 
 import java.util.List;
 
-public class TrackingActivity extends FragmentActivity implements OnMapReadyCallback, MapUpdater {
+public class TrackingActivity extends FragmentActivity implements OnMapReadyCallback, MapUpdater, CourseSubmitListener {
     private Course course;
     private boolean isrecording;
     public GoogleMap mMap;
@@ -139,7 +141,10 @@ public class TrackingActivity extends FragmentActivity implements OnMapReadyCall
     public void showMore(View view){
 
     }
-    public void save(View view){}
+    public void save(View view){
+        FirebaseQueryClient client = FirebaseQueryClient.getInstance();
+        client.submitCourse(course,this);
+    }
 
 
     private LocationRequest getLocationRequest() {
@@ -148,5 +153,15 @@ public class TrackingActivity extends FragmentActivity implements OnMapReadyCall
         locationRequest.setFastestInterval(10000);
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         return locationRequest;
+    }
+
+    @Override
+    public void onCourseSubmitSuccess() {
+    Toast.makeText(this,"Course Submitted",Toast.LENGTH_LONG);
+    }
+
+    @Override
+    public void onCourseSubmitFailure() {
+        Toast.makeText(this,"Submission Failed",Toast.LENGTH_LONG);
     }
 }

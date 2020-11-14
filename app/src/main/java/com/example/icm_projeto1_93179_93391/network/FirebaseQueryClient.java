@@ -24,11 +24,15 @@ import java.util.List;
 
 public class FirebaseQueryClient {
 
-    CollectionReference fetcher;
-    public FirebaseQueryClient() {
+    private CollectionReference fetcher;
+    private static FirebaseQueryClient instance;
+    private FirebaseQueryClient() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         fetcher = db.collection("courses");
         
+    }
+    public  static FirebaseQueryClient getInstance(){if (instance==null) instance = new FirebaseQueryClient();
+    return instance;
     }
     public void getClosestCourses(LatLng coords, int limit,CourseQueryListener listener){
         LinkedList<Course> courses= new LinkedList<>();
