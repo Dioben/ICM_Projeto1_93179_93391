@@ -39,7 +39,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>-->
         </activity>
-        <activity android:name=".ui.main_menu">
+        <activity
+            android:name=".ui.main_menu"
+            android:theme="@style/NoActionBarTheme.ICM_Projeto1_93179_93391">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
