@@ -56,7 +56,8 @@
             android:layout_weight="1"
             android:id="@+id/user_stats"
             android:text="User Stats"
-            android:layout_margin="16dp" />
+            android:layout_margin="16dp"
+            android:onClick="user_stats_onClick"/>
 
         <!--<Button
             android:layout_width="match_parent"

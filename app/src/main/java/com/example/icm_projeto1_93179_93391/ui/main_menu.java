@@ -26,4 +26,9 @@ public class main_menu extends AppCompatActivity {
     public void onBackPressed() {
         return;
     }
+
+    public void user_stats_onClick(View view) {
+        Intent intent = new Intent(this, UserStatsActivity.class);
+        startActivity(intent);
+    }
 }

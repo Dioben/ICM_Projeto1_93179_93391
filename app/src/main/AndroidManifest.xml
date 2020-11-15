@@ -15,12 +15,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ICM_Projeto1_93179_93391">
-        <activity android:name=".ui.UsernamePopupActivity"></activity>
+        <activity
+            android:name=".ui.UserStatsActivity"
+            android:parentActivityName=".ui.main_menu"
+            android:label="@string/title_activity_user_stats"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.UsernamePopupActivity" />
         <activity
             android:name=".ui.SignUpActivity"
             android:label="@string/title_activity_signup"
             android:parentActivityName=".ui.MainActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity android:name=".ui.TrackingPopupActivity" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -38,8 +43,8 @@
             android:name=".ui.TrackingActivity"
             android:label="@string/title_activity_tracking"
             android:parentActivityName=".ui.main_menu"
-            android:theme="@style/NoActionBarTheme.ICM_Projeto1_93179_93391"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/NoActionBarTheme.ICM_Projeto1_93179_93391">
 
             <!--
             <intent-filter>
@@ -51,8 +56,8 @@
         </activity>
         <activity
             android:name=".ui.main_menu"
-            android:theme="@style/NoActionBarTheme.ICM_Projeto1_93179_93391"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/NoActionBarTheme.ICM_Projeto1_93179_93391">
 
             <!--
             <intent-filter>
@@ -64,8 +69,8 @@
         </activity>
         <activity
             android:name=".ui.MainActivity"
-            android:theme="@style/NoActionBarTheme.ICM_Projeto1_93179_93391"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/NoActionBarTheme.ICM_Projeto1_93179_93391">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
