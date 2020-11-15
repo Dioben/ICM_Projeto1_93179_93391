@@ -125,10 +125,7 @@ public class TrackingActivity extends AppCompatActivity implements OnMapReadyCal
             }
         });
     }
-    public void recordPress(View view){
-        if (isrecording){isrecording=false;stopRecording();}
-        else{isrecording=true;startRecording();}
-    }
+
 
     private void startRecording() {
         if (mMap==null){isrecording=false;Toast.makeText(this,
@@ -181,13 +178,12 @@ public class TrackingActivity extends AppCompatActivity implements OnMapReadyCal
         }
     }
 
-
-    private void stopRecording() {
-        course.finalize();
+    @Override
+    protected void onDestroy() {
         mFusedLocationClient.removeLocationUpdates(mLocationCallback);
-        Toast.makeText(this,"Stopping Tracking...",Toast.LENGTH_SHORT).show();
-        if (lastmarker!=null)lastmarker.setTitle("Finish");
+        super.onDestroy();
     }
+    
 
     @Override
     public void updateMapPath(List<LatLng> x) {
@@ -215,7 +211,7 @@ public class TrackingActivity extends AppCompatActivity implements OnMapReadyCal
     private LocationRequest getLocationRequest() {
         LocationRequest locationRequest = new LocationRequest();
         locationRequest.setInterval(15000);
-        locationRequest.setFastestInterval(10000);
+        locationRequest.setFastestInterval(7500);
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         return locationRequest;
     }
@@ -247,8 +243,8 @@ public class TrackingActivity extends AppCompatActivity implements OnMapReadyCal
 
 
     public void upload_button_onClick(View view) {
-        recordPress(null);
-        if (isrecording){return;}
+
+        if (!isrecording){isrecording=true;startRecording();return;}
         course.finalize();
         LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
         View popupView = inflater.inflate(R.layout.activity_tracking_popup, null);
@@ -267,6 +263,7 @@ public class TrackingActivity extends AppCompatActivity implements OnMapReadyCal
                 if (!submit){
                     if (course.getNodes().size()<10){Toast.makeText(getApplication(),"Course is too short",Toast.LENGTH_LONG).show();return;}
                     submit=true;
+                    course.finalize();
                     CheckBox box = popupView.findViewById(R.id.anonymous_checkbox);
                     if (box.isChecked()) course.anon=true;
                     TextInputLayout namebox = popupView.findViewById(R.id.course_name_box);
