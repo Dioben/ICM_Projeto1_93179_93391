@@ -2,6 +2,7 @@ package com.example.icm_projeto1_93179_93391;
 
 import android.location.Location;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.example.icm_projeto1_93179_93391.datamodel.Course;
 import com.example.icm_projeto1_93179_93391.datamodel.CourseNode;
@@ -17,6 +18,7 @@ public class UpdateCourseTask extends AsyncTask<Location,Void, List<LatLng>> {
     public UpdateCourseTask(Course course, MapUpdater mUpdater) {
         this.course=course;
         mapviewer = mUpdater;
+        Log.i("construct","constructing task");
     }
 
     @Override
@@ -38,6 +40,7 @@ public class UpdateCourseTask extends AsyncTask<Location,Void, List<LatLng>> {
     @Override
     protected void onPostExecute(List<LatLng> latLngs) {
         if (latLngs.size()==1){mapviewer.initMapPath(latLngs.get(0));}
-        mapviewer.updateMapPath(latLngs);
+        else{
+        mapviewer.updateMapPath(latLngs);}
     }
 }

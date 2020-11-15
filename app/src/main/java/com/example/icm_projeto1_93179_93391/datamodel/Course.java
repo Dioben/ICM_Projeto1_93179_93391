@@ -41,6 +41,7 @@ public class Course {
 
     public void finalize(){
         //calculate rating and avg_speed here, probably also duration based on nodes*time between node adds
+        if (nodes.size()==0){return;}
         runtime = nodes.get(nodes.size()-1).getTime_stamp() - nodes.get(0).getTime_stamp();
         track_length=0;
         for(CourseNode x: nodes) track_length+=x.getDistance_from_last();
