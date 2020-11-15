@@ -5,25 +5,19 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.EditText;
 
 import com.example.icm_projeto1_93179_93391.R;
 
-public class main_menu extends AppCompatActivity {
+public class SignUpActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_menu);
+        setContentView(R.layout.activity_sign_up);
     }
 
-    public void free_play_onClick(View view) {
-        Intent intent = new Intent(this, TrackingActivity.class);
+    public void signbutton_onClick(View view) {
+        Intent intent = new Intent(this, main_menu.class);
         startActivity(intent);
-    }
-
-    @Override
-    public void onBackPressed() {
-        return;
     }
 }

@@ -5,7 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.MainActivity">
+    tools:context=".ui.MainActivity"
+    android:id="@+id/login_layout">
 
     <TextView
         android:id="@+id/Big_Title"
@@ -22,11 +23,11 @@
         app:layout_constraintVertical_chainStyle="packed" />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/user_name_box"
+            android:id="@+id/user_email_box"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
-            android:hint="User:"
+            android:hint="Email:"
             app:layout_constraintBottom_toTopOf="@+id/user_pw_box"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -36,7 +37,7 @@
             android:layout_marginRight="20dp">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/user_name_input"
+                android:id="@+id/user_email_input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
@@ -53,7 +54,7 @@
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/user_name_box"
+            app:layout_constraintTop_toBottomOf="@+id/user_email_box"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp">
 
@@ -74,7 +75,8 @@
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/user_pw_box" />
+            app:layout_constraintTop_toBottomOf="@+id/user_pw_box"
+            android:onClick="logbutton_onClick"/>
 
         <RelativeLayout
             android:id="@+id/service_login_divider_parent"
@@ -184,11 +186,12 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
-            android:text="Sign In"
+            android:text="Sign Up"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/sign_divider_parent" />
+            app:layout_constraintTop_toBottomOf="@+id/sign_divider_parent"
+            android:onClick="signbutton_onClick"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
