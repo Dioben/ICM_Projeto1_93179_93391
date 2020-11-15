@@ -1,14 +1,26 @@
 package com.example.icm_projeto1_93179_93391.ui;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.FragmentActivity;
+import androidx.appcompat.app.AppCompatActivity;
 
 import android.Manifest;
+import android.animation.ObjectAnimator;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
+import android.widget.ScrollView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
+
+import androidx.appcompat.widget.Toolbar;
 
 import com.example.icm_projeto1_93179_93391.R;
 import com.example.icm_projeto1_93179_93391.UpdateCourseTask;
@@ -31,7 +43,7 @@ import com.google.android.gms.maps.model.Polyline;
 
 import java.util.List;
 
-public class TrackingActivity extends FragmentActivity implements OnMapReadyCallback, MapUpdater, CourseSubmitListener {
+public class TrackingActivity extends AppCompatActivity implements OnMapReadyCallback, MapUpdater, CourseSubmitListener {
     private Course course;
     private boolean isrecording;
     public GoogleMap mMap;
@@ -45,6 +57,15 @@ public class TrackingActivity extends FragmentActivity implements OnMapReadyCall
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tracking);
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.course_toolbar);
+        setSupportActionBar(myToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+//        ScrollView sv = findViewById(R.id.course_data_scrollview);
+//        ConstraintLayout sl = findViewById(R.id.course_layout);
+//        sv.getLayoutParams().height = (int) sl.getHeight()/2;
+//        sl.requestLayout();
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -155,6 +176,39 @@ public class TrackingActivity extends FragmentActivity implements OnMapReadyCall
         return locationRequest;
     }
 
+    public void fullcourse_data_button_onClick(View view) {
+        ToggleButton button = (ToggleButton) view;
+        ScrollView scroll = (ScrollView) findViewById(R.id.course_data_scrollview);
+
+        if(button.isChecked())
+        {
+            ObjectAnimator animation = ObjectAnimator.ofFloat(scroll, "translationY", -800);
+            animation.setDuration(500);
+            animation.start();
+        }
+        else
+        {
+            ObjectAnimator animation = ObjectAnimator.ofFloat(scroll, "translationY", 0);
+            animation.setDuration(500);
+            animation.start();
+        }
+    }
+
+    public void upload_button_onClick(View view) {
+
+        LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+        View popupView = inflater.inflate(R.layout.activity_tracking_popup, null);
+
+        PopupWindow popupWindow = new PopupWindow(
+                popupView,
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                true
+        );
+
+        popupWindow.setElevation(20);
+        popupWindow.showAtLocation(findViewById(R.id.course_layout), Gravity.CENTER,0,0);
+
     @Override
     public void onCourseSubmitSuccess() {
     Toast.makeText(this,"Course Submitted",Toast.LENGTH_LONG);
@@ -163,5 +217,6 @@ public class TrackingActivity extends FragmentActivity implements OnMapReadyCall
     @Override
     public void onCourseSubmitFailure() {
         Toast.makeText(this,"Submission Failed",Toast.LENGTH_LONG);
+      
     }
 }
