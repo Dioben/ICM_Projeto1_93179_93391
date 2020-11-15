@@ -18,7 +18,8 @@ public class Course {
     private int rating;
     private String course_id; //
     private boolean iscopy;
-
+    private boolean isprivate;
+    public String name;
 
     public Course(){}
     public Course(String user){
@@ -113,5 +114,13 @@ public class Course {
 
     public boolean isIscopy() {
         return iscopy;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public boolean isIsprivate() {
+        return isprivate;
     }
 }

@@ -176,7 +176,7 @@ public class TrackingActivity extends AppCompatActivity implements OnMapReadyCal
         course.finalize();
         mFusedLocationClient.removeLocationUpdates(mLocationCallback);
         List<CourseNode> nodes =course.getNodes();
-        lastmarker.setTitle("Finish");
+        if (lastmarker!=null)lastmarker.setTitle("Finish");
     }
 
     @Override
