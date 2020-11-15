@@ -206,8 +206,18 @@ public class TrackingActivity extends AppCompatActivity implements OnMapReadyCal
                 true
         );
 
+        Button confirm_upload_button = (Button) popupView.findViewById(R.id.confirm_upload_button);
+        confirm_upload_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+                onBackPressed();
+            }
+        });
+
         popupWindow.setElevation(20);
-        popupWindow.showAtLocation(findViewById(R.id.course_layout), Gravity.CENTER,0,0);
+        popupWindow.showAtLocation(findViewById(R.id.course_layout), Gravity.CENTER, 0, 0);
+    }
 
     @Override
     public void onCourseSubmitSuccess() {

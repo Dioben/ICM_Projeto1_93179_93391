@@ -20,8 +20,4 @@ public class TrackingPopupActivity extends Activity {
         setContentView(R.layout.activity_tracking_popup);
     }
 
-    public void confirm_upload_button_onClick(View view) {
-        onBackPressed();
-        onBackPressed();
-    }
 }
