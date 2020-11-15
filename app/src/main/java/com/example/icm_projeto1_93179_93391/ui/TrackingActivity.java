@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.Manifest;
 import android.animation.ObjectAnimator;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.ScrollView;
@@ -43,7 +45,9 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.List;
 
@@ -53,7 +57,7 @@ public class TrackingActivity extends AppCompatActivity implements OnMapReadyCal
     private Course course;
     private boolean isrecording;
     public GoogleMap mMap;
-    private String user;
+    private String user="Mark";
     private Polyline pathline;
     private static final int REQUEST_LOCATION_PERMISSION = 1;
     public FusedLocationProviderClient mFusedLocationClient;
@@ -94,8 +98,10 @@ public class TrackingActivity extends AppCompatActivity implements OnMapReadyCal
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        mMap.setMaxZoomPreference(16);
+        mMap.setMaxZoomPreference(18);
         mMap.setMinZoomPreference(10);
+        pathline = mMap.addPolyline(new PolylineOptions().color(Color.RED));
+
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -122,10 +128,10 @@ public class TrackingActivity extends AppCompatActivity implements OnMapReadyCal
     }
 
     private void startRecording() {
-        Log.i("starting", "startRecording called");
         if (mMap==null){isrecording=false;Toast.makeText(this,
                 "Please retry after map initializes",
                 Toast.LENGTH_SHORT).show(); return;}
+        Toast.makeText(this,"Starting tracking...",Toast.LENGTH_LONG).show();
         if (lastmarker!=null){lastmarker.remove();lastmarker=null;}
         if (firstmarker!=null){firstmarker.remove();}
         course = new Course(user); //WARNING: USER IS NOT SET AT THE MOMENT
@@ -146,7 +152,7 @@ public class TrackingActivity extends AppCompatActivity implements OnMapReadyCal
                                 .execute(locationResult.getLastLocation());}
                 }
             };
-            mFusedLocationClient.requestLocationUpdates
+            mFusedLocationClient.requestLocationUpdates  //TODO: FIX THIS THING
                     (getLocationRequest(), mLocationCallback,
                             null /* Looper */);
         }
@@ -175,7 +181,7 @@ public class TrackingActivity extends AppCompatActivity implements OnMapReadyCal
     private void stopRecording() {
         course.finalize();
         mFusedLocationClient.removeLocationUpdates(mLocationCallback);
-        List<CourseNode> nodes =course.getNodes();
+        Toast.makeText(this,"Stopping Tracking...",Toast.LENGTH_SHORT).show();
         if (lastmarker!=null)lastmarker.setTitle("Finish");
     }
 
@@ -231,6 +237,7 @@ public class TrackingActivity extends AppCompatActivity implements OnMapReadyCal
     public void upload_button_onClick(View view) {
         recordPress(null);
         if (isrecording){return;}
+        course.finalize();
         LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
         View popupView = inflater.inflate(R.layout.activity_tracking_popup, null);
 
@@ -245,8 +252,11 @@ public class TrackingActivity extends AppCompatActivity implements OnMapReadyCal
         confirm_upload_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onBackPressed();
-                onBackPressed();
+                CheckBox box = findViewById(R.id.anonymous_checkbox);
+                if (box.isChecked()) course.anon=true;
+                TextInputEditText namebox = findViewById(R.id.course_name_box);
+                course.name=namebox.getText().toString();
+                save(null);
             }
         });
 

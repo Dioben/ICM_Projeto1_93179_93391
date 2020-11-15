@@ -18,7 +18,8 @@ public class Course {
     private int rating;
     private String course_id; //
     private boolean iscopy;
-    private boolean isprivate;
+    public boolean isprivate;
+    public boolean anon;
     public String name;
 
     public Course(){}
@@ -122,5 +123,9 @@ public class Course {
 
     public boolean isIsprivate() {
         return isprivate;
+    }
+
+    public boolean isAnon() {
+        return anon;
     }
 }
