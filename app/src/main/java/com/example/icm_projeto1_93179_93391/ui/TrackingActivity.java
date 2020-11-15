@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.Manifest;
 import android.animation.ObjectAnimator;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
@@ -48,6 +49,7 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.List;
 
@@ -64,6 +66,7 @@ public class TrackingActivity extends AppCompatActivity implements OnMapReadyCal
     public LocationCallback mLocationCallback;
     public Marker firstmarker;
     public Marker lastmarker;
+    boolean submit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,6 +137,7 @@ public class TrackingActivity extends AppCompatActivity implements OnMapReadyCal
         Toast.makeText(this,"Starting tracking...",Toast.LENGTH_LONG).show();
         if (lastmarker!=null){lastmarker.remove();lastmarker=null;}
         if (firstmarker!=null){firstmarker.remove();}
+        if (course==null)
         course = new Course(user); //WARNING: USER IS NOT SET AT THE MOMENT
         if (ActivityCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
@@ -216,23 +220,31 @@ public class TrackingActivity extends AppCompatActivity implements OnMapReadyCal
         return locationRequest;
     }
 
-    public void fullcourse_data_button_onClick(View view) {
-        ToggleButton button = (ToggleButton) view;
-        ScrollView scroll = (ScrollView) findViewById(R.id.course_data_scrollview);
 
-        if(button.isChecked())
-        {
-            ObjectAnimator animation = ObjectAnimator.ofFloat(scroll, "translationY", -800);
-            animation.setDuration(500);
-            animation.start();
-        }
-        else
-        {
-            ObjectAnimator animation = ObjectAnimator.ofFloat(scroll, "translationY", 0);
-            animation.setDuration(500);
-            animation.start();
-        }
+
+
+
+    @Override
+    public void onCourseSubmitSuccess() {
+        Toast.makeText(this,"Course Submitted",Toast.LENGTH_LONG).show();
+        Log.i("this",this.toString());
+
+        Intent ret = new Intent(this,main_menu.class);
+    startActivity(ret);
     }
+
+
+    @Override
+    public void onCourseSubmitFailure() {
+        Toast.makeText(this,"Submission Failed",Toast.LENGTH_LONG).show();
+        submit=false;
+      
+    }
+
+
+
+
+
 
     public void upload_button_onClick(View view) {
         recordPress(null);
@@ -252,11 +264,15 @@ public class TrackingActivity extends AppCompatActivity implements OnMapReadyCal
         confirm_upload_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CheckBox box = findViewById(R.id.anonymous_checkbox);
-                if (box.isChecked()) course.anon=true;
-                TextInputEditText namebox = findViewById(R.id.course_name_box);
-                course.name=namebox.getText().toString();
-                save(null);
+                if (!submit){
+                    if (course.getNodes().size()<10){Toast.makeText(getApplication(),"Course is too short",Toast.LENGTH_LONG).show();return;}
+                    submit=true;
+                    CheckBox box = popupView.findViewById(R.id.anonymous_checkbox);
+                    if (box.isChecked()) course.anon=true;
+                    TextInputLayout namebox = popupView.findViewById(R.id.course_name_box);
+                    course.name=namebox.getEditText().getText().toString();
+                    Toast.makeText(getApplication(),"Submitting course...",Toast.LENGTH_SHORT).show();
+                    save(null);}
             }
         });
 
@@ -264,14 +280,22 @@ public class TrackingActivity extends AppCompatActivity implements OnMapReadyCal
         popupWindow.showAtLocation(findViewById(R.id.course_layout), Gravity.CENTER, 0, 0);
     }
 
-    @Override
-    public void onCourseSubmitSuccess() {
-    Toast.makeText(this,"Course Submitted",Toast.LENGTH_LONG);
-    }
 
-    @Override
-    public void onCourseSubmitFailure() {
-        Toast.makeText(this,"Submission Failed",Toast.LENGTH_LONG);
-      
+    public void fullcourse_data_button_onClick(View view) {
+        ToggleButton button = (ToggleButton) view;
+        ScrollView scroll = (ScrollView) findViewById(R.id.course_data_scrollview);
+
+        if(button.isChecked())
+        {
+            ObjectAnimator animation = ObjectAnimator.ofFloat(scroll, "translationY", -800);
+            animation.setDuration(500);
+            animation.start();
+        }
+        else
+        {
+            ObjectAnimator animation = ObjectAnimator.ofFloat(scroll, "translationY", 0);
+            animation.setDuration(500);
+            animation.start();
+        }
     }
 }

@@ -94,7 +94,6 @@ public class FirebaseQueryClient {
 
 
     public void submitCourse(Course course,CourseSubmitListener listener){
-    //TODO: FIGURE OUT AUTOINCREMENT ID I GUESS  -> just use .add instead of .set
         fetcher.add(course).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
             @Override
             public void onSuccess(DocumentReference documentReference) {
