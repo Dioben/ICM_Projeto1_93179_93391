@@ -22,6 +22,7 @@ import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.ScrollView;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
@@ -51,6 +52,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 import static android.util.Log.i;
@@ -67,7 +69,6 @@ public class TrackingActivity extends AppCompatActivity implements OnMapReadyCal
     public Marker firstmarker;
     public Marker lastmarker;
     boolean submit;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -183,7 +184,7 @@ public class TrackingActivity extends AppCompatActivity implements OnMapReadyCal
         mFusedLocationClient.removeLocationUpdates(mLocationCallback);
         super.onDestroy();
     }
-    
+
 
     @Override
     public void updateMapPath(List<LatLng> x) {
@@ -199,12 +200,14 @@ public class TrackingActivity extends AppCompatActivity implements OnMapReadyCal
     public void initMapPath(LatLng latLng) {
         firstmarker =mMap.addMarker(new MarkerOptions().position(latLng).title("Start"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+        updateData();
     }
 
 
     public void save(View view){
         FirebaseQueryClient client = FirebaseQueryClient.getInstance();
         client.submitCourse(course,this);
+        updateData();
     }
 
 
@@ -277,13 +280,43 @@ public class TrackingActivity extends AppCompatActivity implements OnMapReadyCal
         popupWindow.showAtLocation(findViewById(R.id.course_layout), Gravity.CENTER, 0, 0);
     }
 
+    public void updateData(){
+        TextView datacontainer = findViewById(R.id.course_data);
+        String data ="\nData:\n\n";
+        if (course!=null){
+            List<CourseNode> nodes = course.getNodes();
+            if (nodes.size()>0){
+                double runtime = nodes.get(nodes.size()-1).getTime_stamp() - nodes.get(0).getTime_stamp();
+                runtime/=1e9;//->seconds
+                String rt ="";
+                if (runtime>3600){int hours =(int) runtime/3600;
+                                    rt+= hours+":";
+                                    runtime-=hours*3600;
+                }
+                int mins = (int) runtime/60;
+                rt+=mins +":";
+                runtime-=60*mins;
+                int seconds = (int)runtime;
+                rt+=seconds;
+
+                data +="Running for "+rt+"\nTravelled "+course.formattedTrack_length()+"\n";
+                data+="Max Speed: "+course.formattedMax_speed()+"\n";
+                data+="Nodes: "+nodes.size();
+
+            }
+        }
+        datacontainer.setText(data);
+    }
+
 
     public void fullcourse_data_button_onClick(View view) {
         ToggleButton button = (ToggleButton) view;
         ScrollView scroll = (ScrollView) findViewById(R.id.course_data_scrollview);
-
-        if(button.isChecked())
+        if(button.isChecked()) //pull up
         {
+
+
+
             ObjectAnimator animation = ObjectAnimator.ofFloat(scroll, "translationY", -800);
             animation.setDuration(500);
             animation.start();

@@ -39,21 +39,19 @@ public class Course {
         if (x.getVelocity()>max_speed)
             max_speed= x.getVelocity();
         nodes.add(x);
+        track_length+=x.getDistance_from_last()/1000;
     }
 
     public void finalize(){
         //calculate rating and avg_speed here, probably also duration based on nodes*time between node adds
         if (nodes.size()==0){return;}
         runtime = nodes.get(nodes.size()-1).getTime_stamp() - nodes.get(0).getTime_stamp();
-        track_length=0;
-        for(CourseNode x: nodes) track_length+=x.getDistance_from_last();
+
         timestamp = System.currentTimeMillis();
-        track_length/=1000;
         avg_speed = track_length/runtime;
         if (! iscopy)course_id+=timestamp;
         rating = 0; //TODO: IMPLEMENT THIS
     }
-    public void submit(){}
 
     public LatLng centerMapPoint(){return nodes.get(nodes.size()/2).toLatLng();}
 
@@ -65,13 +63,24 @@ public class Course {
     }
 
     public String formattedRuntime() {//probably reformat worthy, try the thing above maybe idk
-        return runtime/1e+9/3600 + " Hours";
+        double rt = runtime/1e+9/3600;
+        String ret ="";
+        if (rt>3600){int hours =(int) rt/3600;
+            ret+= hours+":";
+            rt-=hours*3600;
+        }
+        int mins = (int) rt/60;
+        ret+=mins +":";
+        rt-=60*mins;
+        int seconds = (int)rt;
+        ret+=seconds;
+        return ret;
     }
     public String formattedTrack_length() {
         return track_length+" km";
     }
     public String formattedMax_speed() {
-        return max_speed+ " km/h";
+        return String.format("%.3f",max_speed)+ " km/h";
     }
     public String formattedAvg_speed() {
         return avg_speed+ " km/h";
