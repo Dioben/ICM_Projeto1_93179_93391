@@ -77,13 +77,13 @@ public class Course {
         return ret;
     }
     public String formattedTrack_length() {
-        return track_length+" km";
+        return String.format("%.3f",track_length)+" km";
     }
     public String formattedMax_speed() {
         return String.format("%.3f",max_speed)+ " km/h";
     }
     public String formattedAvg_speed() {
-        return avg_speed+ " km/h";
+        return String.format("%.3f",avg_speed)+ " km/h";
     }
 
     public long getTimestamp() {
