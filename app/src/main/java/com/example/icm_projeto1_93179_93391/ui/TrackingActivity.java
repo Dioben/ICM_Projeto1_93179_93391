@@ -181,7 +181,8 @@ public class TrackingActivity extends AppCompatActivity implements OnMapReadyCal
 
     @Override
     protected void onDestroy() {
-        mFusedLocationClient.removeLocationUpdates(mLocationCallback);
+        if (mLocationCallback!=null){
+        mFusedLocationClient.removeLocationUpdates(mLocationCallback);}
         super.onDestroy();
     }
 

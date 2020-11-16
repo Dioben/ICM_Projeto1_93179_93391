@@ -12,15 +12,27 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 
 import com.example.icm_projeto1_93179_93391.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity {
-
+    private FirebaseAuth auth;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        auth = FirebaseAuth.getInstance();
         findViewById(R.id.googlesign).setOnClickListener(this::googlesign_onClick);
+    }
+
+    @Override
+    protected void onStart() {
+        FirebaseUser usr = auth.getCurrentUser();
+        if (usr!=null){ //TODO: SET UP DATA,SKIP TO MAIN MENU
+            Intent skip = new Intent(this,main_menu.class);
+            startActivity(skip);
+        }
+        super.onStart();
     }
 
     public void signbutton_onClick(View view) {
@@ -34,7 +46,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void googlesign_onClick(View view) {
-        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!click!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
         View popupView = inflater.inflate(R.layout.activity_username_popup, null);
 

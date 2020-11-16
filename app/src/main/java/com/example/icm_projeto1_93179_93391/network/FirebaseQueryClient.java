@@ -45,7 +45,7 @@ public class FirebaseQueryClient {
 
     public void getTopRatedCourse(int limit,CourseQueryListener listener){
 
-        fetcher.orderBy("rating", Query.Direction.DESCENDING).limit(limit).get().addOnCompleteListener(
+        fetcher.whereEqualTo("isprivate",false).orderBy("rating", Query.Direction.DESCENDING).limit(limit).get().addOnCompleteListener(
                 new OnCompleteListener<QuerySnapshot>() {
 
                     @Override
