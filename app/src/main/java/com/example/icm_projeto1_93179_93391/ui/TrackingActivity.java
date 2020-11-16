@@ -193,6 +193,7 @@ public class TrackingActivity extends AppCompatActivity implements OnMapReadyCal
         else{ lastmarker.setPosition(x.get(x.size()-1));}
         pathline.setPoints(x);
         mMap.moveCamera(CameraUpdateFactory.newLatLng(x.get(x.size()-1)));
+        updateData();
     }
 
 
