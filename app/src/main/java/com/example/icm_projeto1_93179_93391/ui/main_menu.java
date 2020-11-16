@@ -21,4 +21,14 @@ public class main_menu extends AppCompatActivity {
         Intent intent = new Intent(this, TrackingActivity.class);
         startActivity(intent);
     }
+
+    @Override
+    public void onBackPressed() {
+        return;
+    }
+
+    public void user_stats_onClick(View view) {
+        Intent intent = new Intent(this, UserStatsActivity.class);
+        startActivity(intent);
+    }
 }
