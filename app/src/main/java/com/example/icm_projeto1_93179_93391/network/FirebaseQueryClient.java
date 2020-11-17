@@ -8,6 +8,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -26,6 +27,7 @@ public class FirebaseQueryClient {
 
     private CollectionReference fetcher;
     private static FirebaseQueryClient instance;
+
     private FirebaseQueryClient() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         fetcher = db.collection("courses");
@@ -105,5 +107,9 @@ public class FirebaseQueryClient {
                 listener.onCourseSubmitFailure();
             }
         });
+    }
+
+    public void setUser(FirebaseUser user){//TODO AFTER USER CLASS IS SET UP
+
     }
 }
