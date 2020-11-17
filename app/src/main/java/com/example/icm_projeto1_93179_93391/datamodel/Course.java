@@ -1,6 +1,7 @@
 package com.example.icm_projeto1_93179_93391.datamodel;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -11,6 +12,7 @@ public class Course {
     private long timestamp;
     private double runtime;
     private String user;
+    private String uID;
     private double  track_length;
     private List<CourseNode> nodes;
     private double max_speed; //no min cuz that'll probably be 0 when the user stops
@@ -22,18 +24,22 @@ public class Course {
     public boolean anon;
     public String name;
 
-    public Course(){}
-    public Course(String user){
+    public Course(){} //DO NOT REMOVE, FIREBASE NEEDS THIS
+    public Course(String user,String uID,boolean copy){
         this.user=user;
-        this.course_id=user;
+        this.course_id=uID;
         nodes = new ArrayList<>();
+        iscopy= copy;
+        this.uID = FirebaseAuth.getInstance().getCurrentUser().getUid();
     }
-    public Course(String user,String ID){
+
+    public Course(String user,String uID){ //will add ts to id later
         this.user=user;
+        this.course_id=uID;
         nodes = new ArrayList<>();
-        course_id = ID; //
-        iscopy=true;
+        this.uID = FirebaseAuth.getInstance().getCurrentUser().getUid();
     }
+
     public void append_node(CourseNode x){
         //your validation here
         if (x.getVelocity()>max_speed)
@@ -50,7 +56,7 @@ public class Course {
         timestamp = System.currentTimeMillis();
         avg_speed = track_length/runtime;
         if (! iscopy)course_id+=timestamp;
-        rating = 0; //TODO: IMPLEMENT THIS
+        rating = (int)(avg_speed*runtime/1e+9/60);
     }
 
     public LatLng centerMapPoint(){return nodes.get(nodes.size()/2).toLatLng();}

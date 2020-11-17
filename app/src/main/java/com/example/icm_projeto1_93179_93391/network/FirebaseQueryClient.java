@@ -3,11 +3,13 @@ package com.example.icm_projeto1_93179_93391.network;
 import androidx.annotation.NonNull;
 
 import com.example.icm_projeto1_93179_93391.datamodel.Course;
+import com.example.icm_projeto1_93179_93391.datamodel.User;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
@@ -27,12 +29,27 @@ public class FirebaseQueryClient {
 
     private CollectionReference fetcher;
     private static FirebaseQueryClient instance;
+    private static  User user;
+    private static DocumentReference userUpstream;
 
     private FirebaseQueryClient() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         fetcher = db.collection("courses");
         
     }
+    public void setUser(FirebaseUser user){
+        userUpstream= FirebaseFirestore.getInstance().collection("users").document(user.getUid());
+        userUpstream.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                FirebaseQueryClient.user = documentSnapshot.toObject(User.class);
+            }
+        });
+    }
+    public User getUser(){return  user;}
+
+
+
     public  static FirebaseQueryClient getInstance(){if (instance==null) instance = new FirebaseQueryClient();
     return instance;
     }
@@ -67,9 +84,26 @@ public class FirebaseQueryClient {
         );
     }
 
+    private void getMyCourses(CourseQueryListener listener){
+        fetcher.whereEqualTo("uID", FirebaseAuth.getInstance().getCurrentUser().getUid()).get().addOnSuccessListener(
+                new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        LinkedList<Course> courses= new LinkedList<>();
+                        List<DocumentSnapshot> documents = queryDocumentSnapshots.getDocuments();
+                        for (DocumentSnapshot snap: documents){courses.add(snap.toObject(Course.class)); }
+                        listener.onCourseListing(courses);
+                    }
+                }
+        ).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                listener.onCourseListingFail();
+            }
+        });
+    }
 
-
-    public void getUserCourses(String user, CourseQueryListener listener){
+    public void getUserCourses(String user, CourseQueryListener listener){//duplicate usernames
 
         fetcher.whereEqualTo("user",user).get().addOnCompleteListener(
                 new OnCompleteListener<QuerySnapshot>() {
@@ -98,7 +132,7 @@ public class FirebaseQueryClient {
     public void submitCourse(Course course,CourseSubmitListener listener){
         fetcher.add(course).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
             @Override
-            public void onSuccess(DocumentReference documentReference) {
+            public void onSuccess(DocumentReference documentReference) { //TODO: UPDATE USER AND SEND IT TOO
                 listener.onCourseSubmitSuccess();
             }
         }).addOnFailureListener(new OnFailureListener() {
@@ -109,7 +143,5 @@ public class FirebaseQueryClient {
         });
     }
 
-    public void setUser(FirebaseUser user){//TODO AFTER USER CLASS IS SET UP
 
-    }
 }
