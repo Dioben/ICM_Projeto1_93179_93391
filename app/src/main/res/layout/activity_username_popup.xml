@@ -29,7 +29,7 @@
         <!-- width is 268 because match_parent wasn't working-->
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/course_name_input"
+            android:id="@+id/user_name_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
