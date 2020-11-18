@@ -26,7 +26,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class FirebaseQueryClient {
-
+    //TODO: QUERY FUNCTION THAT GETS NEARBY RECENT ORDERED BY RATING
     private CollectionReference fetcher;
     private static FirebaseQueryClient instance;
     private static  User user;
@@ -53,6 +53,59 @@ public class FirebaseQueryClient {
     public  static FirebaseQueryClient getInstance(){if (instance==null) instance = new FirebaseQueryClient();
     return instance;
     }
+
+
+
+
+
+
+
+
+
+    public void getDefault(LatLng coords, int limit,CourseQueryListener listener){
+        double r = 100/6371; //100 km over earth radius
+        double latmin = Math.toDegrees(Math.toRadians(coords.latitude-r));
+        double latmax = Math.toDegrees(Math.toRadians(coords.latitude+r));
+        double deltaLon = Math.toDegrees(Math.asin(Math.sin(r)/Math.cos(Math.toRadians(coords.longitude))));
+        double longmin = coords.longitude-deltaLon;
+        double longmax = coords.longitude-deltaLon; //im not accounting for 180th meridian, i literally dont understand how it works
+
+
+        fetcher.whereEqualTo("isprivate",false).
+                whereGreaterThanOrEqualTo("lon",longmax).
+                whereGreaterThanOrEqualTo("lat",latmax).
+                whereLessThanOrEqualTo("lon",longmin).
+                whereLessThanOrEqualTo("lat",latmin).
+                orderBy("timestamp", Query.Direction.DESCENDING).
+                limit(limit).
+                orderBy("rating", Query.Direction.DESCENDING).
+                get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                LinkedList<Course> courses= new LinkedList<>();
+                for (DocumentSnapshot snap: queryDocumentSnapshots.getDocuments()){courses.add(snap.toObject(Course.class)); }
+                listener.onCourseListing(courses);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                listener.onCourseListingFail();
+            }
+        });
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
     public void getClosestCourses(LatLng coords, int limit,CourseQueryListener listener){
         //all the math behind this is worded terribly in walls of text, they better pay me for figuring ths out
         // following this http://janmatuschek.de/LatitudeLongitudeBoundingCoordinates
@@ -63,7 +116,6 @@ public class FirebaseQueryClient {
         double longmin = coords.longitude-deltaLon;
         double longmax = coords.longitude-deltaLon; //im not accounting for 180th meridian, i literally dont understand how it works
 
-        LinkedList<Course> courses= new LinkedList<>();
         fetcher.whereEqualTo("isprivate",false).
                 whereGreaterThanOrEqualTo("lon",longmax).
                 whereGreaterThanOrEqualTo("lat",latmax).
@@ -112,7 +164,7 @@ public class FirebaseQueryClient {
     }
 
     private void getMyCourses(CourseQueryListener listener){
-        fetcher.whereEqualTo("uID", FirebaseAuth.getInstance().getCurrentUser().getUid()).get().addOnSuccessListener(
+        fetcher.whereEqualTo("uID", FirebaseAuth.getInstance().getCurrentUser().getUid()).orderBy("timestamp", Query.Direction.DESCENDING).get().addOnSuccessListener(
                 new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
