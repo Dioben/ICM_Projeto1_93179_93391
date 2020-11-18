@@ -32,8 +32,8 @@ public class SignUpActivity extends AppCompatActivity {
     public void signbutton_onClick(View view) {
         TextInputEditText pass = findViewById(R.id.user_pw_input);
         TextInputEditText pass2 = findViewById(R.id.input_pw_confirm);
-        String pw = pass.getText().toString();
-        String pw2 = pass2.getText().toString();
+        String pw = pass.getText().toString().trim();
+        String pw2 = pass2.getText().toString().trim();
         if(! pw.equals(pw2)){
             Toast.makeText(this,"Passwords do not match",Toast.LENGTH_LONG).show();
             return;
@@ -41,9 +41,13 @@ public class SignUpActivity extends AppCompatActivity {
         TextInputEditText email = findViewById(R.id.user_email_input);
         TextInputEditText namebox = findViewById(R.id.user_name_input);
 
-        String mail = email.getText().toString();
-        String name = namebox.getText().toString();
+        String mail = email.getText().toString().trim();
+        String name = namebox.getText().toString().trim();
 
+        if (mail.isEmpty() || pw.isEmpty()){
+            Toast.makeText(this,"email and password must not be empty",Toast.LENGTH_LONG).show();
+            return;
+        }
         auth.createUserWithEmailAndPassword(mail,pw).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {

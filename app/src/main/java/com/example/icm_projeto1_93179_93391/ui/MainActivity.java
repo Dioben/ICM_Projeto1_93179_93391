@@ -45,9 +45,10 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onStart() {
+        auth.signOut();//DEBUG PURPOSES PLEASE REMOVE
         FirebaseUser usr = auth.getCurrentUser();
-        
-        if (usr!=null){ //TODO: SET UP DATA,SKIP TO MAIN MENU
+
+        if (usr!=null){
             FirebaseQueryClient.getInstance().setUser(usr);
             Intent skip = new Intent(this,main_menu.class);
             startActivity(skip);
@@ -63,8 +64,12 @@ public class MainActivity extends AppCompatActivity {
     public void logbutton_onClick(View view) {
         TextInputEditText email = findViewById(R.id.user_email_input);
         TextInputEditText pass = findViewById(R.id.user_pw_input);
-        String mail = email.getText().toString();
-        String pw = pass.getText().toString();
+        String mail = email.getText().toString().trim();
+        String pw = pass.getText().toString().trim();
+        if (mail.isEmpty() || pw.isEmpty()){
+            Toast.makeText(this,"No empty fields allowed",Toast.LENGTH_LONG).show();
+            return;
+        }
         auth.signInWithEmailAndPassword(mail,pw).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
             @Override
             public void onSuccess(AuthResult authResult) {
@@ -121,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
             } catch (ApiException e) {
-                Toast.makeText(this,"Google Sign in failed",Toast.LENGTH_LONG).show();
+                Toast.makeText(this,"Google Sign in failed "+e,Toast.LENGTH_LONG).show();
             }
         }
     }
@@ -136,13 +141,13 @@ public class MainActivity extends AppCompatActivity {
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 true
         );
-        TextInputEditText namebox = findViewById(R.id.user_name_input);
+        TextInputEditText namebox = popupView.findViewById(R.id.user_name_input);
 
         Button confirm_upload_button = (Button) popupView.findViewById(R.id.confirm_username_button);
         confirm_upload_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String name = namebox.getText().toString();
+                String name = namebox.getText().toString().trim();
                 UserProfileChangeRequest request = new UserProfileChangeRequest.Builder().setDisplayName(name).build();
                 usr.updateProfile(request).addOnFailureListener(new OnFailureListener() {
                     @Override

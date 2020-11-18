@@ -68,10 +68,12 @@
         </ScrollView>
 
         <androidx.appcompat.widget.Toolbar
+
             android:id="@+id/course_toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorOnPrimary"
+            app:layout_constraintTop_toTopOf="parent"
             android:elevation="4dp">
 
             <Button
