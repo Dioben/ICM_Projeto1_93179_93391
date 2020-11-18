@@ -123,6 +123,7 @@ public class MainActivity extends AppCompatActivity {
                             FirebaseQueryClient.getInstance().setUser(authResult.getUser());
                             Intent main = new Intent(getApplication(),main_menu.class);
                             startActivity(main);
+                            return;
                         }
                         usr = auth.getCurrentUser();
                         expandUI();
