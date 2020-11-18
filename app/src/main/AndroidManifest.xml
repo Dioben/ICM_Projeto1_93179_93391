@@ -9,6 +9,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -17,10 +18,28 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ICM_Projeto1_93179_93391">
         <activity
-            android:name=".ui.UserStatsActivity"
+            android:name=".ui.FollowingActivity"
+            android:label="Course"
+            android:parentActivityName=".ui.CourseInfoActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/NoActionBarTheme.ICM_Projeto1_93179_93391" />
+        <activity
+            android:name=".ui.CourseInfoActivity"
+            android:label="Course info"
+            android:parentActivityName=".ui.CourseListActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/NoActionBarTheme.ICM_Projeto1_93179_93391">
+        </activity>
+        <activity
+            android:name=".ui.CourseListActivity"
+            android:label="Courses"
             android:parentActivityName=".ui.main_menu"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.UserStatsActivity"
             android:label="@string/title_activity_user_stats"
-            android:screenOrientation="portrait"/>
+            android:parentActivityName=".ui.main_menu"
+            android:screenOrientation="portrait" />
         <activity android:name=".ui.UsernamePopupActivity" />
         <activity
             android:name=".ui.SignUpActivity"
@@ -47,31 +66,18 @@
             android:screenOrientation="portrait"
             android:theme="@style/NoActionBarTheme.ICM_Projeto1_93179_93391">
 
-            <!--
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-            -->
         </activity>
         <activity
             android:name=".ui.main_menu"
             android:screenOrientation="portrait"
             android:theme="@style/NoActionBarTheme.ICM_Projeto1_93179_93391">
 
-            <!--
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-            -->
         </activity>
         <activity
             android:name=".ui.MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/NoActionBarTheme.ICM_Projeto1_93179_93391">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

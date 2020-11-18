@@ -24,11 +24,16 @@ public class main_menu extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        return;
+        this.moveTaskToBack(true);
     }
 
     public void user_stats_onClick(View view) {
         Intent intent = new Intent(this, UserStatsActivity.class);
+        startActivity(intent);
+    }
+
+    public void courses_onClick(View view) {
+        Intent intent = new Intent(this, CourseListActivity.class);
         startActivity(intent);
     }
 }
