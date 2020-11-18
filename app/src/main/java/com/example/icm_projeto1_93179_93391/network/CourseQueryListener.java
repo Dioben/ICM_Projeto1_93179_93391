@@ -6,4 +6,6 @@ import java.util.LinkedList;
 
 public interface CourseQueryListener {
     void onCourseListing(LinkedList<Course> list);
+
+    void onCourseListingFail();
 }

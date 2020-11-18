@@ -3,11 +3,14 @@ package com.example.icm_projeto1_93179_93391.network;
 import androidx.annotation.NonNull;
 
 import com.example.icm_projeto1_93179_93391.datamodel.Course;
+import com.example.icm_projeto1_93179_93391.datamodel.User;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -23,20 +26,115 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class FirebaseQueryClient {
-
+    //TODO: QUERY FUNCTION THAT GETS NEARBY RECENT ORDERED BY RATING
     private CollectionReference fetcher;
     private static FirebaseQueryClient instance;
+    private static  User user;
+    private static DocumentReference userUpstream;
+
     private FirebaseQueryClient() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         fetcher = db.collection("courses");
         
     }
+    public void setUser(FirebaseUser user){
+        userUpstream= FirebaseFirestore.getInstance().collection("users").document(user.getUid());
+        userUpstream.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                FirebaseQueryClient.user = documentSnapshot.toObject(User.class);
+            }
+        });
+    }
+    public User getUser(){return  user;}
+
+
+
     public  static FirebaseQueryClient getInstance(){if (instance==null) instance = new FirebaseQueryClient();
     return instance;
     }
+
+
+
+
+
+
+
+
+
+    public void getDefault(LatLng coords, int limit,CourseQueryListener listener){
+        double r = 100/6371; //100 km over earth radius
+        double latmin = Math.toDegrees(Math.toRadians(coords.latitude-r));
+        double latmax = Math.toDegrees(Math.toRadians(coords.latitude+r));
+        double deltaLon = Math.toDegrees(Math.asin(Math.sin(r)/Math.cos(Math.toRadians(coords.longitude))));
+        double longmin = coords.longitude-deltaLon;
+        double longmax = coords.longitude-deltaLon; //im not accounting for 180th meridian, i literally dont understand how it works
+
+
+        fetcher.whereEqualTo("isprivate",false).
+                whereGreaterThanOrEqualTo("lon",longmax).
+                whereGreaterThanOrEqualTo("lat",latmax).
+                whereLessThanOrEqualTo("lon",longmin).
+                whereLessThanOrEqualTo("lat",latmin).
+                orderBy("timestamp", Query.Direction.DESCENDING).
+                limit(limit).
+                orderBy("rating", Query.Direction.DESCENDING).
+                get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                LinkedList<Course> courses= new LinkedList<>();
+                for (DocumentSnapshot snap: queryDocumentSnapshots.getDocuments()){courses.add(snap.toObject(Course.class)); }
+                listener.onCourseListing(courses);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                listener.onCourseListingFail();
+            }
+        });
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
     public void getClosestCourses(LatLng coords, int limit,CourseQueryListener listener){
-        LinkedList<Course> courses= new LinkedList<>();
-        //come up with whatever criteria make up being close and copy paste another of the functions here
+        //all the math behind this is worded terribly in walls of text, they better pay me for figuring ths out
+        // following this http://janmatuschek.de/LatitudeLongitudeBoundingCoordinates
+        double r = 100/6371; //100 km over earth radius
+        double latmin = Math.toDegrees(Math.toRadians(coords.latitude-r));
+        double latmax = Math.toDegrees(Math.toRadians(coords.latitude+r));
+        double deltaLon = Math.toDegrees(Math.asin(Math.sin(r)/Math.cos(Math.toRadians(coords.longitude))));
+        double longmin = coords.longitude-deltaLon;
+        double longmax = coords.longitude-deltaLon; //im not accounting for 180th meridian, i literally dont understand how it works
+
+        fetcher.whereEqualTo("isprivate",false).
+                whereGreaterThanOrEqualTo("lon",longmax).
+                whereGreaterThanOrEqualTo("lat",latmax).
+                whereLessThanOrEqualTo("lon",longmin).
+                whereLessThanOrEqualTo("lat",latmin).
+                orderBy("rating", Query.Direction.DESCENDING).limit(limit).
+                get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                LinkedList<Course> courses= new LinkedList<>();
+                for (DocumentSnapshot snap: queryDocumentSnapshots.getDocuments()){courses.add(snap.toObject(Course.class)); }
+                listener.onCourseListing(courses);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                listener.onCourseListingFail();
+            }
+        });
     }
 
 
@@ -65,9 +163,26 @@ public class FirebaseQueryClient {
         );
     }
 
+    private void getMyCourses(CourseQueryListener listener){
+        fetcher.whereEqualTo("uID", FirebaseAuth.getInstance().getCurrentUser().getUid()).orderBy("timestamp", Query.Direction.DESCENDING).get().addOnSuccessListener(
+                new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        LinkedList<Course> courses= new LinkedList<>();
+                        List<DocumentSnapshot> documents = queryDocumentSnapshots.getDocuments();
+                        for (DocumentSnapshot snap: documents){courses.add(snap.toObject(Course.class)); }
+                        listener.onCourseListing(courses);
+                    }
+                }
+        ).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                listener.onCourseListingFail();
+            }
+        });
+    }
 
-
-    public void getUserCourses(String user, CourseQueryListener listener){
+    public void getUserCourses(String user, CourseQueryListener listener){//duplicate usernames
 
         fetcher.whereEqualTo("user",user).get().addOnCompleteListener(
                 new OnCompleteListener<QuerySnapshot>() {
@@ -94,9 +209,18 @@ public class FirebaseQueryClient {
 
 
     public void submitCourse(Course course,CourseSubmitListener listener){
+        user.addRuntimeNs(course.getRuntime());
+        user.addLengthKM(course.getTrack_length());
+        user.setAvg_speed(user.getTotal_tracklength()/user.getTotal_runtime()/1e+9/3600);
+        if (course.getMax_speed()>user.getMax_speed())
+            user.setMax_speed(course.getMax_speed());
+        if (course.getRating()>user.getTop_rating())
+            user.setTop_rating(course.getRating());
+
         fetcher.add(course).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
             @Override
-            public void onSuccess(DocumentReference documentReference) {
+            public void onSuccess(DocumentReference documentReference) { //TODO: UPDATE USER AND SEND IT TOO
+                userUpstream.set(user);
                 listener.onCourseSubmitSuccess();
             }
         }).addOnFailureListener(new OnFailureListener() {
@@ -106,4 +230,6 @@ public class FirebaseQueryClient {
             }
         });
     }
+
+
 }

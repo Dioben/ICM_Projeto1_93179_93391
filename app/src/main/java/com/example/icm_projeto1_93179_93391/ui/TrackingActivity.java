@@ -51,6 +51,8 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.text.DecimalFormat;
 import java.util.List;
@@ -61,7 +63,6 @@ public class TrackingActivity extends AppCompatActivity implements OnMapReadyCal
     private Course course;
     private boolean isrecording;
     public GoogleMap mMap;
-    private String user="Mark";
     private Polyline pathline;
     private static final int REQUEST_LOCATION_PERMISSION = 1;
     public FusedLocationProviderClient mFusedLocationClient;
@@ -135,8 +136,10 @@ public class TrackingActivity extends AppCompatActivity implements OnMapReadyCal
         Toast.makeText(this,"Starting tracking...",Toast.LENGTH_LONG).show();
         if (lastmarker!=null){lastmarker.remove();lastmarker=null;}
         if (firstmarker!=null){firstmarker.remove();}
-        if (course==null)
-        course = new Course(user); //WARNING: USER IS NOT SET AT THE MOMENT
+        if (course==null){
+            FirebaseUser usr = FirebaseAuth.getInstance().getCurrentUser();
+        course = new Course(usr.getDisplayName(),usr.getUid(),false);
+        }
         if (ActivityCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -154,7 +157,7 @@ public class TrackingActivity extends AppCompatActivity implements OnMapReadyCal
                                 .execute(locationResult.getLastLocation());}
                 }
             };
-            mFusedLocationClient.requestLocationUpdates  //TODO: FIX THIS THING
+            mFusedLocationClient.requestLocationUpdates
                     (getLocationRequest(), mLocationCallback,
                             null /* Looper */);
         }
