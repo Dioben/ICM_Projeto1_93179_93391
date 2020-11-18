@@ -35,6 +35,8 @@ import com.google.firebase.auth.UserProfileChangeRequest;
 public class MainActivity extends AppCompatActivity {
     private static final int RC_SIGN_IN =1 ;
     private FirebaseAuth auth;
+    boolean googlecreated;
+    FirebaseUser usr;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void googlesign_onClick(View view) {
-
+        if (googlecreated){expandUI(); return;}
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
@@ -122,7 +124,8 @@ public class MainActivity extends AppCompatActivity {
                             Intent main = new Intent(getApplication(),main_menu.class);
                             startActivity(main);
                         }
-                        expandUI(authResult.getUser());
+                        usr = auth.getCurrentUser();
+                        expandUI();
                     }
                 });
             } catch (ApiException e) {
@@ -131,7 +134,8 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void expandUI(FirebaseUser usr){
+    public void expandUI(){
+        googlecreated=true;
         LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
         View popupView = inflater.inflate(R.layout.activity_username_popup, null);
 

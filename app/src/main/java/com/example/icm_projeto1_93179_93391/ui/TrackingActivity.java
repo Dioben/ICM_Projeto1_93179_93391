@@ -157,7 +157,7 @@ public class TrackingActivity extends AppCompatActivity implements OnMapReadyCal
                                 .execute(locationResult.getLastLocation());}
                 }
             };
-            mFusedLocationClient.requestLocationUpdates  //TODO: FIX THIS THING
+            mFusedLocationClient.requestLocationUpdates
                     (getLocationRequest(), mLocationCallback,
                             null /* Looper */);
         }

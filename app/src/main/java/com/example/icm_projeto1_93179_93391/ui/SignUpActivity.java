@@ -22,6 +22,8 @@ import com.google.firebase.auth.UserProfileChangeRequest;
 
 public class SignUpActivity extends AppCompatActivity {
     FirebaseAuth auth;
+    FirebaseUser usr;
+    boolean created;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,6 +32,30 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     public void signbutton_onClick(View view) {
+        TextInputEditText namebox = findViewById(R.id.user_name_input);
+        String name = namebox.getText().toString().trim();
+        if (created){
+            UserProfileChangeRequest request = new UserProfileChangeRequest.Builder().setDisplayName(name).build();
+            usr.updateProfile(request).addOnSuccessListener(
+                    new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            FirebaseQueryClient.getInstance().setUser(auth.getCurrentUser());
+                            Intent start = new Intent(getApplication(),main_menu.class);
+                            startActivity(start);
+                        }
+                    }
+            ).addOnFailureListener(
+                    new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(getApplication(),"Setting username failed, please retry",Toast.LENGTH_LONG).show();
+                        }
+                    }
+            );
+            return;
+        }
+
         TextInputEditText pass = findViewById(R.id.user_pw_input);
         TextInputEditText pass2 = findViewById(R.id.input_pw_confirm);
         String pw = pass.getText().toString().trim();
@@ -39,10 +65,9 @@ public class SignUpActivity extends AppCompatActivity {
             return;
         }
         TextInputEditText email = findViewById(R.id.user_email_input);
-        TextInputEditText namebox = findViewById(R.id.user_name_input);
 
         String mail = email.getText().toString().trim();
-        String name = namebox.getText().toString().trim();
+
 
         if (mail.isEmpty() || pw.isEmpty()){
             Toast.makeText(this,"email and password must not be empty",Toast.LENGTH_LONG).show();
@@ -56,16 +81,26 @@ public class SignUpActivity extends AppCompatActivity {
         }).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
             @Override
             public void onSuccess(AuthResult authResult) {
-                FirebaseUser usr = authResult.getUser();
+                created=true;
+                usr = authResult.getUser();
                 UserProfileChangeRequest request = new UserProfileChangeRequest.Builder().setDisplayName(name).build();
-                usr.updateProfile(request).addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        FirebaseQueryClient.getInstance().setUser(auth.getCurrentUser());
-                        Intent start = new Intent(getApplication(),main_menu.class);
-                        startActivity(start);
-                    }
-                });
+                usr.updateProfile(request).addOnSuccessListener(
+                        new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                FirebaseQueryClient.getInstance().setUser(auth.getCurrentUser());
+                                Intent start = new Intent(getApplication(),main_menu.class);
+                                startActivity(start);
+                            }
+                        }
+                ).addOnFailureListener(
+                        new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(getApplication(),"Setting username failed, please retry",Toast.LENGTH_LONG).show();
+                            }
+                        }
+                );
             }
         })
         ;
