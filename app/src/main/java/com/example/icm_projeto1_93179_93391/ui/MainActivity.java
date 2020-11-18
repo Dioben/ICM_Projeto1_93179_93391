@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onStart() {
-        auth.signOut();//DEBUG PURPOSES PLEASE REMOVE
+        //auth.signOut();//DEBUG PURPOSES PLEASE REMOVE
         FirebaseUser usr = auth.getCurrentUser();
 
         if (usr!=null){

@@ -12,11 +12,13 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
@@ -316,18 +318,15 @@ public class TrackingActivity extends AppCompatActivity implements OnMapReadyCal
 
     public void fullcourse_data_button_onClick(View view) {
         ToggleButton button = (ToggleButton) view;
-        ScrollView scroll = (ScrollView) findViewById(R.id.course_data_scrollview);
-        if(button.isChecked()) //pull up
-        {
-            ObjectAnimator animation = ObjectAnimator.ofFloat(scroll, "translationY", -800);
-            animation.setDuration(500);
-            animation.start();
-        }
-        else
-        {
-            ObjectAnimator animation = ObjectAnimator.ofFloat(scroll, "translationY", 0);
-            animation.setDuration(500);
-            animation.start();
+        ScrollView scroll = findViewById(R.id.course_data_scrollview);
+
+        DisplayMetrics metrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+
+        if (button.isChecked()){
+            scroll.animate().translationY(-scroll.getHeight()+(float) Math.ceil(85 * metrics.density));
+        } else {
+            scroll.animate().translationY(0);
         }
     }
 }
