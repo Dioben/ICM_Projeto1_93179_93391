@@ -19,12 +19,17 @@ public class CourseListActivity extends AppCompatActivity {
 
         String[] owners = new String[] {"Me","Anyone"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.course_sort_item, owners);
-        AutoCompleteTextView editTextFilledExposedDropdown = findViewById(R.id.owner_dropdown);
-        editTextFilledExposedDropdown.setAdapter(adapter);
+        AutoCompleteTextView dropdown = findViewById(R.id.owner_dropdown);
+        dropdown.setAdapter(adapter);
+        //dropdown.setFreezesText(false);
+        dropdown.setText(owners[0],false);
 
         String[] sorts = new String[] {"Proximity","Date uploaded"};
         adapter = new ArrayAdapter<>(this, R.layout.course_sort_item, sorts);
-        editTextFilledExposedDropdown = findViewById(R.id.sort_dropdown);
-        editTextFilledExposedDropdown.setAdapter(adapter);
+        dropdown = findViewById(R.id.sort_dropdown);
+        dropdown.setAdapter(adapter);
+        //dropdown.setFreezesText(false);
+        dropdown.setText(sorts[0],false);
+
     }
 }

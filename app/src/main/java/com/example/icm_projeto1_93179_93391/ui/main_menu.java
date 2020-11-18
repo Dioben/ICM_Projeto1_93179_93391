@@ -8,6 +8,8 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.example.icm_projeto1_93179_93391.R;
+import com.google.firebase.FirebaseApiNotAvailableException;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class main_menu extends AppCompatActivity {
 
@@ -34,6 +36,12 @@ public class main_menu extends AppCompatActivity {
 
     public void courses_onClick(View view) {
         Intent intent = new Intent(this, CourseListActivity.class);
+        startActivity(intent);
+    }
+
+    public void logoutbutton_onClick(View view) {
+        FirebaseAuth.getInstance().signOut();
+        Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
 }

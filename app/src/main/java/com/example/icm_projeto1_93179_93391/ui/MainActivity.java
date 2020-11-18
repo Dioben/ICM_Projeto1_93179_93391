@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onStart() {
-        auth.signOut();//DEBUG PURPOSES PLEASE REMOVE
+        //auth.signOut();//DEBUG PURPOSES PLEASE REMOVE
         FirebaseUser usr = auth.getCurrentUser();
 
         if (usr!=null){
@@ -123,6 +123,7 @@ public class MainActivity extends AppCompatActivity {
                             FirebaseQueryClient.getInstance().setUser(authResult.getUser());
                             Intent main = new Intent(getApplication(),main_menu.class);
                             startActivity(main);
+                            return;
                         }
                         usr = auth.getCurrentUser();
                         expandUI();
