@@ -7,7 +7,8 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.UserStatsActivity">
+    tools:context=".ui.UserStatsActivity"
+    android:padding="16dp">
 
     <TextView
         android:layout_width="match_parent"
@@ -15,7 +16,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         android:id="@+id/user_info_text"
-        android:padding="16dp"
         android:text="Insert text here"
         android:textSize="18sp"/>
 

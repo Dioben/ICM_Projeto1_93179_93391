@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.CourseInfoActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/course_info_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorOnPrimary"
+        app:layout_constraintTop_toTopOf="parent"
+        android:elevation="4dp">
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Run"
+            android:layout_gravity="right"
+            android:layout_marginRight="8dp"
+            android:onClick="run_button_onClick"
+            />
+    </androidx.appcompat.widget.Toolbar>
+
+    <!--<fragment
+        android:id="@+id/map"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        />-->
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/course_info_toolbar"
+        android:text="Insert course info here"
+        android:textSize="18sp"
+        android:layout_margin="16dp"/>
+  </androidx.constraintlayout.widget.ConstraintLayout>

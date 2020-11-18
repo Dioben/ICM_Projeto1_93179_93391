@@ -1,9 +1,9 @@
 package com.example.icm_projeto1_93179_93391.ui;
 
 import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.app.ActivityCompat;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
 import android.animation.ObjectAnimator;
@@ -15,7 +15,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -25,8 +24,6 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
-
-import androidx.appcompat.widget.Toolbar;
 
 import com.example.icm_projeto1_93179_93391.R;
 import com.example.icm_projeto1_93179_93391.UpdateCourseTask;
@@ -49,17 +46,15 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import java.text.DecimalFormat;
 import java.util.List;
 
 import static android.util.Log.i;
 
-public class TrackingActivity extends AppCompatActivity implements OnMapReadyCallback, MapUpdater, CourseSubmitListener {
+public class FollowingActivity extends AppCompatActivity implements OnMapReadyCallback, MapUpdater, CourseSubmitListener {
     private Course course;
     private boolean isrecording;
     public GoogleMap mMap;
@@ -70,18 +65,16 @@ public class TrackingActivity extends AppCompatActivity implements OnMapReadyCal
     public Marker firstmarker;
     public Marker lastmarker;
     boolean submit;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_tracking);
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.course_toolbar);
+        setContentView(R.layout.activity_following);
+
+        Toolbar myToolbar = findViewById(R.id.course_toolbar);
         setSupportActionBar(myToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-//        ScrollView sv = findViewById(R.id.course_data_scrollview);
-//        ConstraintLayout sl = findViewById(R.id.course_layout);
-//        sv.getLayoutParams().height = (int) sl.getHeight()/2;
-//        sl.requestLayout();
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -130,15 +123,16 @@ public class TrackingActivity extends AppCompatActivity implements OnMapReadyCal
 
 
     private void startRecording() {
-        if (mMap==null){isrecording=false;Toast.makeText(this,
-                "Please retry after map initializes",
-                Toast.LENGTH_SHORT).show(); return;}
+        if (mMap==null){isrecording=false;
+            Toast.makeText(this,
+                    "Please retry after map initializes",
+                    Toast.LENGTH_SHORT).show(); return;}
         Toast.makeText(this,"Starting tracking...",Toast.LENGTH_LONG).show();
         if (lastmarker!=null){lastmarker.remove();lastmarker=null;}
         if (firstmarker!=null){firstmarker.remove();}
         if (course==null){
             FirebaseUser usr = FirebaseAuth.getInstance().getCurrentUser();
-        course = new Course(usr.getDisplayName(),usr.getUid(),false);
+            course = new Course(usr.getDisplayName(),usr.getUid(),false);
         }
         if (ActivityCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
@@ -153,7 +147,7 @@ public class TrackingActivity extends AppCompatActivity implements OnMapReadyCal
                     // If tracking is turned on, reverse geocode into an address
                     i("isrecording","record status: "+isrecording);
                     if (isrecording) {
-                        new UpdateCourseTask(course,TrackingActivity.this)
+                        new UpdateCourseTask(course,FollowingActivity.this)
                                 .execute(locationResult.getLastLocation());}
                 }
             };
@@ -185,7 +179,7 @@ public class TrackingActivity extends AppCompatActivity implements OnMapReadyCal
     @Override
     protected void onDestroy() {
         if (mLocationCallback!=null){
-        mFusedLocationClient.removeLocationUpdates(mLocationCallback);}
+            mFusedLocationClient.removeLocationUpdates(mLocationCallback);}
         super.onDestroy();
     }
 
@@ -234,7 +228,7 @@ public class TrackingActivity extends AppCompatActivity implements OnMapReadyCal
         Log.i("this",this.toString());
 
         Intent ret = new Intent(this,main_menu.class);
-    startActivity(ret);
+        startActivity(ret);
     }
 
 
@@ -242,7 +236,7 @@ public class TrackingActivity extends AppCompatActivity implements OnMapReadyCal
     public void onCourseSubmitFailure() {
         Toast.makeText(this,"Submission Failed",Toast.LENGTH_LONG).show();
         submit=false;
-      
+
     }
 
 
@@ -295,8 +289,8 @@ public class TrackingActivity extends AppCompatActivity implements OnMapReadyCal
                 runtime/=1e9;//->seconds
                 String rt ="";
                 if (runtime>3600){int hours =(int) runtime/3600;
-                                    rt+= hours+":";
-                                    runtime-=hours*3600;
+                    rt+= hours+":";
+                    runtime-=hours*3600;
                 }
                 int mins = (int) runtime/60;
                 rt+=mins +":";
