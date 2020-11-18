@@ -23,7 +23,8 @@ public class Course {
     public boolean isprivate;
     public boolean anon;
     public String name;
-
+    private double lat; //querying inner doc range seems like a mess or even impossible
+    private double lon;
     public Course(){} //DO NOT REMOVE, FIREBASE NEEDS THIS
     public Course(String user,String uID,boolean copy){
         this.user=user;
@@ -52,9 +53,10 @@ public class Course {
         //calculate rating and avg_speed here, probably also duration based on nodes*time between node adds
         if (nodes.size()==0){return;}
         runtime = nodes.get(nodes.size()-1).getTime_stamp() - nodes.get(0).getTime_stamp();
-
+        lat = nodes.get(0).getLat();
+        lon = nodes.get(0).getLon();
         timestamp = System.currentTimeMillis();
-        avg_speed = track_length/runtime;
+        avg_speed = track_length/runtime/1e+9/3600;
         if (! iscopy)course_id+=timestamp;
         rating = (int)(avg_speed*runtime/1e+9/60);
     }
@@ -143,4 +145,6 @@ public class Course {
     public boolean isAnon() {
         return anon;
     }
+
+    public String getuID(){return uID;}
 }

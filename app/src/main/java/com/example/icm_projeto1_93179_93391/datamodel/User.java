@@ -71,5 +71,5 @@ public class User {
         this.total_tracklength = total_tracklength;
     }
     public void addRuntimeNs(double rt){total_runtime+=rt;}
-    public void addLengthMeters(int meters){total_tracklength+=meters/1000;}
+    public void addLengthKM(double km){total_tracklength+=km;}
 }

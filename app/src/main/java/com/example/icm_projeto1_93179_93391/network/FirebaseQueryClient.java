@@ -54,8 +54,35 @@ public class FirebaseQueryClient {
     return instance;
     }
     public void getClosestCourses(LatLng coords, int limit,CourseQueryListener listener){
+        //all the math behind this is worded terribly in walls of text, they better pay me for figuring ths out
+        // following this http://janmatuschek.de/LatitudeLongitudeBoundingCoordinates
+        double r = 100/6371; //100 km over earth radius
+        double latmin = Math.toDegrees(Math.toRadians(coords.latitude-r));
+        double latmax = Math.toDegrees(Math.toRadians(coords.latitude+r));
+        double deltaLon = Math.toDegrees(Math.asin(Math.sin(r)/Math.cos(Math.toRadians(coords.longitude))));
+        double longmin = coords.longitude-deltaLon;
+        double longmax = coords.longitude-deltaLon; //im not accounting for 180th meridian, i literally dont understand how it works
+
         LinkedList<Course> courses= new LinkedList<>();
-        //come up with whatever criteria make up being close and copy paste another of the functions here
+        fetcher.whereEqualTo("isprivate",false).
+                whereGreaterThanOrEqualTo("lon",longmax).
+                whereGreaterThanOrEqualTo("lat",latmax).
+                whereLessThanOrEqualTo("lon",longmin).
+                whereLessThanOrEqualTo("lat",latmin).
+                orderBy("rating", Query.Direction.DESCENDING).limit(limit).
+                get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                LinkedList<Course> courses= new LinkedList<>();
+                for (DocumentSnapshot snap: queryDocumentSnapshots.getDocuments()){courses.add(snap.toObject(Course.class)); }
+                listener.onCourseListing(courses);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                listener.onCourseListingFail();
+            }
+        });
     }
 
 
@@ -130,9 +157,18 @@ public class FirebaseQueryClient {
 
 
     public void submitCourse(Course course,CourseSubmitListener listener){
+        user.addRuntimeNs(course.getRuntime());
+        user.addLengthKM(course.getTrack_length());
+        user.setAvg_speed(user.getTotal_tracklength()/user.getTotal_runtime()/1e+9/3600);
+        if (course.getMax_speed()>user.getMax_speed())
+            user.setMax_speed(course.getMax_speed());
+        if (course.getRating()>user.getTop_rating())
+            user.setTop_rating(course.getRating());
+
         fetcher.add(course).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
             @Override
             public void onSuccess(DocumentReference documentReference) { //TODO: UPDATE USER AND SEND IT TOO
+                userUpstream.set(user);
                 listener.onCourseSubmitSuccess();
             }
         }).addOnFailureListener(new OnFailureListener() {
