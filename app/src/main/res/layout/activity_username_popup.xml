@@ -22,7 +22,7 @@
         android:id="@+id/user_name_box"
         android:layout_width="268dp"
         android:layout_height="wrap_content"
-        android:hint="Name:"
+        android:hint="Username:"
         app:layout_constraintTop_toBottomOf="@+id/servicesignpopup_text"
         app:layout_constraintLeft_toLeftOf="parent"
         android:layout_marginTop="16dp">

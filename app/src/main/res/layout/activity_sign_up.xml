@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:hint="Name:"
+        android:hint="Username:"
         app:layout_constraintBottom_toTopOf="@+id/user_email_box"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -20,26 +20,7 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp">
 
-          LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
-        View popupView = inflater.inflate(R.layout.activity_username_popup, null);
-
-        PopupWindow popupWindow = new PopupWindow(
-                popupView,
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                true
-        );
-
-        Button confirm_upload_button = (Button) popupView.findViewById(R.id.confirm_username_button);
-        confirm_upload_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                logbutton_onClick(v);
-            }
-        });
-
-        popupWindow.setElevation(20);
-        popupWindow.showAtLocation(findViewById(R.id.login_layout), Gravity.CENTER, 0, 0);<com.google.android.material.textfield.TextInputEditText
+    <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/user_name_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
