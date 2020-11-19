@@ -10,7 +10,7 @@ public class User {
     private long top_rating;
     private double total_runtime;
     private double total_tracklength;
-
+    private int coursecount;
     public User(){}
 
 
@@ -87,5 +87,13 @@ public class User {
         int seconds = (int)rt;
         ret+=seconds;
         return ret;
+    }
+
+    public int getCoursecount() {
+        return coursecount;
+    }
+
+    public void setCoursecount(int coursecount) {
+        this.coursecount = coursecount;
     }
 }

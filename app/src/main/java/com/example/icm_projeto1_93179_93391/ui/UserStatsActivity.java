@@ -26,9 +26,10 @@ public class UserStatsActivity extends AppCompatActivity {
         String t = "";
         t+="Name: "+user.getUsername()+"\n"
         +"\nTop Score: "+user.getTop_rating()
+                +"\nTrack Count: "+user.getCoursecount()
         +"\nTotal track length: "+ String.format("%.3f km",user.getTotal_tracklength())
         +"\nTotal Runtime: "+user.formattedRuntime()
         +"\nAverage Speed: "+String.format("%.3f km/h",user.getAvg_speed());
-
+        text.setText(t);
     }
 }
