@@ -72,4 +72,20 @@ public class User {
     }
     public void addRuntimeNs(double rt){total_runtime+=rt;}
     public void addLengthKM(double km){total_tracklength+=km;}
+
+
+    public String formattedRuntime() {//probably reformat worthy, try the thing above maybe idk
+        double rt = total_runtime/1e+9/3600;
+        String ret ="";
+        if (rt>3600){int hours =(int) rt/3600;
+            ret+= hours+":";
+            rt-=hours*3600;
+        }
+        int mins = (int) rt/60;
+        ret+=mins +":";
+        rt-=60*mins;
+        int seconds = (int)rt;
+        ret+=seconds;
+        return ret;
+    }
 }
