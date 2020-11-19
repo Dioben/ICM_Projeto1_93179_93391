@@ -147,4 +147,12 @@ public class Course {
     }
 
     public String getuID(){return uID;}
+
+    public void setCourse_id(String course_id) {
+        this.course_id = course_id;
+    }
+
+    public void setIscopy(boolean iscopy) {
+        this.iscopy = iscopy;
+    }
 }
