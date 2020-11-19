@@ -226,7 +226,8 @@ public class FirebaseQueryClient {
 
         fetcher.add(course).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
             @Override
-            public void onSuccess(DocumentReference documentReference) { //TODO: UPDATE USER AND SEND IT TOO
+            public void onSuccess(DocumentReference documentReference) {
+                user.setCoursecount(user.getCoursecount()+1);
                 userUpstream.set(user);
                 listener.onCourseSubmitSuccess();
             }
