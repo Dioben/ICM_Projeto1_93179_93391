@@ -149,11 +149,12 @@ public class TrackingActivity extends AppCompatActivity implements OnMapReadyCal
                             {Manifest.permission.ACCESS_FINE_LOCATION},
                     REQUEST_LOCATION_PERMISSION);
         } else {
+            Button btn = findViewById(R.id.start_button);
+            btn.setText("Stop");
             mLocationCallback = new LocationCallback() {
                 @Override
                 public void onLocationResult(LocationResult locationResult) {
                     // If tracking is turned on, reverse geocode into an address
-                    i("isrecording","record status: "+isrecording);
                     if (isrecording) {
                         new UpdateCourseTask(course,TrackingActivity.this)
                                 .execute(locationResult.getLastLocation());}

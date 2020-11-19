@@ -42,8 +42,15 @@ public class FirebaseQueryClient {
         userUpstream.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if (documentSnapshot.exists())
                 FirebaseQueryClient.user = documentSnapshot.toObject(User.class);
+                else{
+                    FirebaseQueryClient.user = new User();
+                    FirebaseQueryClient.user.setUid(user.getUid());
+                    FirebaseQueryClient.user.setUsername(user.getDisplayName());
+                }
             }
+
         });
     }
     public User getUser(){return  user;}
