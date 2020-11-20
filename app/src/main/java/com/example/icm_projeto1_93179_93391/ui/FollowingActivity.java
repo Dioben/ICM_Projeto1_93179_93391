@@ -1,9 +1,9 @@
 package com.example.icm_projeto1_93179_93391.ui;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
+import androidx.appcompat.app.AppCompatActivity;
 
 import android.Manifest;
 import android.animation.ObjectAnimator;
@@ -16,7 +16,9 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
@@ -26,6 +28,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import androidx.appcompat.widget.Toolbar;
+
+import com.example.icm_projeto1_93179_93391.ExtractOGTask;
 import com.example.icm_projeto1_93179_93391.R;
 import com.example.icm_projeto1_93179_93391.UpdateCourseTask;
 import com.example.icm_projeto1_93179_93391.datamodel.Course;
@@ -41,22 +46,28 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 import static android.util.Log.i;
 
-public class FollowingActivity extends AppCompatActivity implements OnMapReadyCallback, MapUpdater, CourseSubmitListener {
+public class FollowingActivity extends AppCompatActivity implements OnMapReadyCallback, MapUpdater, CourseSubmitListener,OnLatLngExtract {
     private Course course;
+    private Course og;
     private boolean isrecording;
     public GoogleMap mMap;
     private Polyline pathline;
@@ -66,13 +77,11 @@ public class FollowingActivity extends AppCompatActivity implements OnMapReadyCa
     public Marker firstmarker;
     public Marker lastmarker;
     boolean submit;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_following);
-
-        Toolbar myToolbar = findViewById(R.id.course_toolbar);
+        setContentView(R.layout.activity_tracking);
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.course_toolbar);
         setSupportActionBar(myToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -82,6 +91,8 @@ public class FollowingActivity extends AppCompatActivity implements OnMapReadyCa
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        Intent origin = getIntent();
+        og = origin.getParcelableExtra("course");
 
     }
 
@@ -99,16 +110,10 @@ public class FollowingActivity extends AppCompatActivity implements OnMapReadyCa
         mMap = googleMap;
         mMap.setMaxZoomPreference(18);
         mMap.setMinZoomPreference(10);
-        pathline = mMap.addPolyline(new PolylineOptions().color(Color.RED));
 
+        pathline = mMap.addPolyline(new PolylineOptions().color(Color.RED));
+        new ExtractOGTask(this).execute(og);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
             return;
         }
         mFusedLocationClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
@@ -124,10 +129,9 @@ public class FollowingActivity extends AppCompatActivity implements OnMapReadyCa
 
 
     private void startRecording() {
-        if (mMap==null){isrecording=false;
-            Toast.makeText(this,
-                    "Please retry after map initializes",
-                    Toast.LENGTH_SHORT).show(); return;}
+        if (mMap==null){isrecording=false;Toast.makeText(this,
+                "Please retry after map initializes",
+                Toast.LENGTH_SHORT).show(); return;}
         Toast.makeText(this,"Starting tracking...",Toast.LENGTH_LONG).show();
         if (lastmarker!=null){lastmarker.remove();lastmarker=null;}
         if (firstmarker!=null){firstmarker.remove();}
@@ -142,11 +146,12 @@ public class FollowingActivity extends AppCompatActivity implements OnMapReadyCa
                             {Manifest.permission.ACCESS_FINE_LOCATION},
                     REQUEST_LOCATION_PERMISSION);
         } else {
+            Button btn = findViewById(R.id.start_button);
+            btn.setText("Stop");
             mLocationCallback = new LocationCallback() {
                 @Override
                 public void onLocationResult(LocationResult locationResult) {
                     // If tracking is turned on, reverse geocode into an address
-                    i("isrecording","record status: "+isrecording);
                     if (isrecording) {
                         new UpdateCourseTask(course,FollowingActivity.this)
                                 .execute(locationResult.getLastLocation());}
@@ -204,41 +209,11 @@ public class FollowingActivity extends AppCompatActivity implements OnMapReadyCa
     }
 
 
-    public void save(View view){
-        FirebaseQueryClient client = FirebaseQueryClient.getInstance();
-        client.submitCourse(course,this);
-        updateData();
-    }
-
-
-    private LocationRequest getLocationRequest() {
-        LocationRequest locationRequest = new LocationRequest();
-        locationRequest.setInterval(15000);
-        locationRequest.setFastestInterval(7500);
-        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        return locationRequest;
-    }
 
 
 
 
 
-    @Override
-    public void onCourseSubmitSuccess() {
-        Toast.makeText(this,"Course Submitted",Toast.LENGTH_LONG).show();
-        Log.i("this",this.toString());
-
-        Intent ret = new Intent(this,main_menu.class);
-        startActivity(ret);
-    }
-
-
-    @Override
-    public void onCourseSubmitFailure() {
-        Toast.makeText(this,"Submission Failed",Toast.LENGTH_LONG).show();
-        submit=false;
-
-    }
 
 
 
@@ -263,13 +238,29 @@ public class FollowingActivity extends AppCompatActivity implements OnMapReadyCa
         confirm_upload_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                TextInputLayout namebox = popupView.findViewById(R.id.course_name_box);
+                MaterialButton private_button = popupView.findViewById(R.id.privacy_private_button);
+                MaterialButton public_button = popupView.findViewById(R.id.privacy_public_button);
+                TextView privacy_error = popupView.findViewById(R.id.privacy_button_bar_error);
+                namebox.setErrorEnabled(false);
+                privacy_error.setVisibility(View.GONE);
+                if ((namebox.getEditText().getText().toString().trim().isEmpty())||(!(private_button.isChecked() || public_button.isChecked()))) {
+                    if (namebox.getEditText().getText().toString().trim().isEmpty()) {
+                        namebox.setError("Name field cannot be empty");
+                        namebox.setErrorEnabled(true);
+                    }
+                    if (!(private_button.isChecked() || public_button.isChecked())) {
+                        privacy_error.setVisibility(View.VISIBLE);
+                    }
+                    return;
+                }
+
                 if (!submit){
                     if (course.getNodes().size()<10){Toast.makeText(getApplication(),"Course is too short",Toast.LENGTH_LONG).show();return;}
                     submit=true;
                     course.finalize();
                     CheckBox box = popupView.findViewById(R.id.anonymous_checkbox);
                     if (box.isChecked()) course.anon=true;
-                    TextInputLayout namebox = popupView.findViewById(R.id.course_name_box);
                     course.name=namebox.getEditText().getText().toString();
                     Toast.makeText(getApplication(),"Submitting course...",Toast.LENGTH_SHORT).show();
                     save(null);}
@@ -309,9 +300,38 @@ public class FollowingActivity extends AppCompatActivity implements OnMapReadyCa
     }
 
 
+
+
+    public void save(View view){
+        FirebaseQueryClient client = FirebaseQueryClient.getInstance();
+        client.submitCourse(course,this);
+        updateData();
+    }
+
+
+    private LocationRequest getLocationRequest() {
+        LocationRequest locationRequest = new LocationRequest();
+        locationRequest.setInterval(15000);
+        locationRequest.setFastestInterval(7500);
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        return locationRequest;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
     public void fullcourse_data_button_onClick(View view) {
         ToggleButton button = (ToggleButton) view;
-        ScrollView scroll = (ScrollView) findViewById(R.id.course_data_scrollview);
+        ScrollView scroll = findViewById(R.id.course_data_scrollview);
 
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
@@ -321,5 +341,34 @@ public class FollowingActivity extends AppCompatActivity implements OnMapReadyCa
         } else {
             scroll.animate().translationY(0);
         }
+    }
+
+    @Override
+    public void OnLatLngExtract(List<LatLng> x) {
+    mMap.addPolyline(new PolylineOptions().color(Color.BLUE).addAll(x));
+    mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)).title("Starting position").position(x.get(0)));
+        mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)).title("Expected end").position(x.get(x.size()-1)));
+    }
+
+
+
+
+
+
+    @Override
+    public void onCourseSubmitSuccess() {
+        Toast.makeText(this,"Course Submitted",Toast.LENGTH_LONG).show();
+        Log.i("this",this.toString());
+
+        Intent ret = new Intent(this,main_menu.class);
+        startActivity(ret);
+    }
+
+
+    @Override
+    public void onCourseSubmitFailure() {
+        Toast.makeText(this,"Submission Failed",Toast.LENGTH_LONG).show();
+        submit=false;
+
     }
 }
