@@ -91,7 +91,7 @@ public class FollowingActivity extends AppCompatActivity implements OnMapReadyCa
         setSupportActionBar(myToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-
+        myToolbar.setNavigationOnClickListener(view ->this.onBackPressed());
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -103,7 +103,12 @@ public class FollowingActivity extends AppCompatActivity implements OnMapReadyCa
 
     }
 
-
+    @Override
+    public void onBackPressed() {
+        Intent ret = new Intent();
+        ret.putExtra("course",course);
+        finish();
+    }
 
 
 

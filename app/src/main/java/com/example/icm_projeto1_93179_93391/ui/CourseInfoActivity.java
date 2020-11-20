@@ -23,6 +23,7 @@ public class CourseInfoActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         course = getIntent().getParcelableExtra("course");
+        if (course==null) onBackPressed();
     }
 
     @Override
