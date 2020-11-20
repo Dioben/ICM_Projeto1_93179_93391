@@ -1,5 +1,8 @@
 package com.example.icm_projeto1_93179_93391.datamodel;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -8,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class Course {
+public class Course implements Parcelable {
     private long timestamp;
     private double runtime;
     private String user;
@@ -40,6 +43,62 @@ public class Course {
         nodes = new ArrayList<>();
         this.uID = FirebaseAuth.getInstance().getCurrentUser().getUid();
     }
+
+    protected Course(Parcel in) {
+        timestamp = in.readLong();
+        runtime = in.readDouble();
+        user = in.readString();
+        uID = in.readString();
+        track_length = in.readDouble();
+        nodes = in.createTypedArrayList(CourseNode.CREATOR);
+        max_speed = in.readDouble();
+        avg_speed = in.readDouble();
+        rating = in.readInt();
+        course_id = in.readString();
+        iscopy = in.readByte() != 0;
+        isprivate = in.readByte() != 0;
+        anon = in.readByte() != 0;
+        name = in.readString();
+        lat = in.readDouble();
+        lon = in.readDouble();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(timestamp);
+        dest.writeDouble(runtime);
+        dest.writeString(user);
+        dest.writeString(uID);
+        dest.writeDouble(track_length);
+        dest.writeTypedList(nodes);
+        dest.writeDouble(max_speed);
+        dest.writeDouble(avg_speed);
+        dest.writeInt(rating);
+        dest.writeString(course_id);
+        dest.writeByte((byte) (iscopy ? 1 : 0));
+        dest.writeByte((byte) (isprivate ? 1 : 0));
+        dest.writeByte((byte) (anon ? 1 : 0));
+        dest.writeString(name);
+        dest.writeDouble(lat);
+        dest.writeDouble(lon);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<Course> CREATOR = new Creator<Course>() {
+        @Override
+        public Course createFromParcel(Parcel in) {
+            return new Course(in);
+        }
+
+        @Override
+        public Course[] newArray(int size) {
+            return new Course[size];
+        }
+    };
 
     public void append_node(CourseNode x){
         //your validation here

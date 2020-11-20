@@ -1,12 +1,15 @@
 package com.example.icm_projeto1_93179_93391.datamodel;
 
 import android.location.Location;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import androidx.core.location.LocationManagerCompat;
 
 import com.google.android.gms.maps.model.LatLng;
 
-public class CourseNode {
+public class CourseNode implements Parcelable {
+
     private double time_stamp; //gonna have to use system.nano timing cuz duration is api 26
     private double distance_from_last;
     private double velocity;// km/h
@@ -30,6 +33,41 @@ public class CourseNode {
         velocity = distance_from_last/1000/time_ellapsed_hours;
 
     }
+
+    protected CourseNode(Parcel in) {
+        time_stamp = in.readDouble();
+        distance_from_last = in.readDouble();
+        velocity = in.readDouble();
+        lat = in.readDouble();
+        lon = in.readDouble();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeDouble(time_stamp);
+        dest.writeDouble(distance_from_last);
+        dest.writeDouble(velocity);
+        dest.writeDouble(lat);
+        dest.writeDouble(lon);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<CourseNode> CREATOR = new Creator<CourseNode>() {
+        @Override
+        public CourseNode createFromParcel(Parcel in) {
+            return new CourseNode(in);
+        }
+
+        @Override
+        public CourseNode[] newArray(int size) {
+            return new CourseNode[size];
+        }
+    };
+
     public LatLng toLatLng(){return new LatLng(lat,lon);}
     public Location toLocation(){Location x = new Location("");x.setLatitude(lat);x.setLongitude(lon);return x;}
 
