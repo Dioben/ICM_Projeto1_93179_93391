@@ -12,6 +12,7 @@ public class CourseNode {
     private double velocity;// km/h
     private double lat; //saving location to firebase is tricky so we're using this instead
     private double lon;
+    public CourseNode(){}
     public CourseNode(Location place){
                                 lat = place.getLatitude();lon=place.getLongitude();
                                time_stamp= System.nanoTime(); //duration.zero requires api lvl 26

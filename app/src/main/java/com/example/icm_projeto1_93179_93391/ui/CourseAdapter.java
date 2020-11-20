@@ -2,9 +2,11 @@ package com.example.icm_projeto1_93179_93391.ui;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -27,14 +29,14 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
     @NonNull
     @Override
     public CourseViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-//        View mItemView = mInflater.inflate(R.layout.courselistelement, parent, false);
-//        return new CourseViewHolder(mItemView, this);
-        return null;
+        View mItemView = mInflater.inflate(R.layout.course_sort_item, parent, false);
+        return new CourseViewHolder(mItemView, this);
     }
 
     @Override
     public void onBindViewHolder(@NonNull CourseViewHolder holder, int position) {
-
+    Course current = courses.get(position);
+        holder.dataholder.setText(current.name + " at "+current.getFormattedTimestamp());
     }
 
     @Override
@@ -43,6 +45,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
     }
 
     public class CourseViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        TextView dataholder;
         //UI elements here
         //
         //
@@ -54,13 +57,15 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
         public CourseViewHolder(View mItemView, CourseAdapter courseAdapter) {
             super(mItemView);
             mAdapter = courseAdapter;
-            //buttonView.setOnClickListener(this);
+            dataholder = mItemView.findViewById(R.id.course_item);
+            dataholder.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
-        //whatever you want them to expand here
-            // mAdapter.activity.dostuff()
+            Intent inspect = new Intent(activity,CourseInfoActivity.class);
+
+            activity.startActivity(inspect);
         }
     }
 }

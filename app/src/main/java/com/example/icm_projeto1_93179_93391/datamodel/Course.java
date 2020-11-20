@@ -65,7 +65,7 @@ public class Course {
 
     public String getFormattedTimestamp() {//requires tweaks maybe
         SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss z");
-        Date date = new Date(System.currentTimeMillis());
+        Date date = new Date(timestamp);
         System.out.println(formatter.format(date));
         return formatter.format(date);
     }
@@ -154,5 +154,13 @@ public class Course {
 
     public void setIscopy(boolean iscopy) {
         this.iscopy = iscopy;
+    }
+
+    public double getLat() {
+        return lat;
+    }
+
+    public double getLon() {
+        return lon;
     }
 }
