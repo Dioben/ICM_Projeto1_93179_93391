@@ -18,20 +18,15 @@ public class CourseComparison {
     private String errorcode;
     private Location diffOG;
     LinkedList<LatLng> drawable;
-    private CourseComparison(Course original,Course dupe){
+    public CourseComparison(Course original, Course dupe){
         og = original;
         copy=dupe;
         validcopy= true;
         currentnode=0;
         current = og.getNodes().get(0).toLocation();
+        drawable = new LinkedList<>();
     }
-    public static CourseComparison generate(Course og, Course dupe, Location current) {
-        Location start = og.getNodes().get(0).toLocation();
-        if (start.distanceTo(current)>50)
-        return null;
-        return new CourseComparison(og,dupe);
 
-    }
 
     public void appendNode(Location local){
         List<CourseNode> nodes = copy.getNodes();

@@ -133,12 +133,8 @@ public class TrackingActivity extends AppCompatActivity implements OnMapReadyCal
                 "Please retry after map initializes",
                 Toast.LENGTH_SHORT).show(); return;}
         Toast.makeText(this,"Starting tracking...",Toast.LENGTH_LONG).show();
-        if (lastmarker!=null){lastmarker.remove();lastmarker=null;}
-        if (firstmarker!=null){firstmarker.remove();}
-        if (course==null){
-            FirebaseUser usr = FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseUser usr = FirebaseAuth.getInstance().getCurrentUser();
         course = new Course(usr.getDisplayName(),usr.getUid(),false);
-        }
         if (ActivityCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
