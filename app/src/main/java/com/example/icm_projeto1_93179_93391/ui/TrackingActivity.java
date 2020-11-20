@@ -12,6 +12,9 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.ImageSpan;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
@@ -82,6 +85,37 @@ public class TrackingActivity extends AppCompatActivity implements OnMapReadyCal
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
+        ToggleButton info_button = findViewById(R.id.fullcourse_data_button);
+        ImageSpan imageSpan = new ImageSpan(this, R.drawable.ic_baseline_arrow_drop_up_24);
+        SpannableString content = new SpannableString("X");
+        content.setSpan(imageSpan, 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        info_button.setText(content);
+        info_button.setTextOff(content);
+        imageSpan = new ImageSpan(this, R.drawable.ic_baseline_arrow_drop_down_24);
+        content = new SpannableString("X");
+        content.setSpan(imageSpan, 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        info_button.setTextOn(content);
+
+
+        ToggleButton record_button = findViewById(R.id.record_button);
+        imageSpan = new ImageSpan(this, R.drawable.ic_baseline_play_arrow_24);
+        content = new SpannableString("X");
+        content.setSpan(imageSpan, 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        record_button.setText(content);
+        record_button.setTextOff(content);
+        imageSpan = new ImageSpan(this, R.drawable.ic_baseline_stop_24);
+        content = new SpannableString("X");
+        content.setSpan(imageSpan, 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        record_button.setTextOn(content);
+
+        Button camera_button = findViewById(R.id.camera_button);
+        imageSpan = new ImageSpan(this, R.drawable.ic_baseline_photo_camera_24);
+        content = new SpannableString("X");
+        content.setSpan(imageSpan, 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        camera_button.setText(content);
+
+
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -142,8 +176,6 @@ public class TrackingActivity extends AppCompatActivity implements OnMapReadyCal
                             {Manifest.permission.ACCESS_FINE_LOCATION},
                     REQUEST_LOCATION_PERMISSION);
         } else {
-            Button btn = findViewById(R.id.start_button);
-            btn.setText("Stop");
             mLocationCallback = new LocationCallback() {
                 @Override
                 public void onLocationResult(LocationResult locationResult) {
@@ -247,6 +279,7 @@ public class TrackingActivity extends AppCompatActivity implements OnMapReadyCal
 
 
     public void upload_button_onClick(View view) {
+        ((ToggleButton) findViewById(R.id.record_button)).setChecked(true);
 
         if (!isrecording){isrecording=true;startRecording();return;}
         course.finalize();
@@ -298,7 +331,11 @@ public class TrackingActivity extends AppCompatActivity implements OnMapReadyCal
     }
 
     public void updateData(){
-        TextView datacontainer = findViewById(R.id.course_data);
+        TextView travelled_info = findViewById(R.id.course_data_travelled);
+        TextView runtime_info = findViewById(R.id.course_data_runtime);
+        TextView max_speed_info = findViewById(R.id.course_data_max_speed);
+        TextView nodes_info = findViewById(R.id.course_data_nodes);
+
         String data ="\nData:\n\n";
         if (course!=null){
             List<CourseNode> nodes = course.getNodes();
@@ -316,27 +353,30 @@ public class TrackingActivity extends AppCompatActivity implements OnMapReadyCal
                 int seconds = (int)runtime;
                 rt+=seconds;
 
-                data +="Running for "+rt+"\nTravelled "+course.formattedTrack_length()+"\n";
-                data+="Max Speed: "+course.formattedMax_speed()+"\n";
-                data+="Nodes: "+nodes.size();
+                travelled_info.setText(course.formattedTrack_length());
+                runtime_info.setText(rt);
+                max_speed_info.setText(course.formattedMax_speed());
+                nodes_info.setText(String.valueOf(nodes.size()));
 
             }
         }
-        datacontainer.setText(data);
     }
 
 
     public void fullcourse_data_button_onClick(View view) {
         ToggleButton button = (ToggleButton) view;
         ScrollView scroll = findViewById(R.id.course_data_scrollview);
+        LinearLayout buttons = findViewById(R.id.course_buttons);
 
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
         if (button.isChecked()){
             scroll.animate().translationY(-scroll.getHeight()+(float) Math.ceil(85 * metrics.density));
+            buttons.animate().translationY(-scroll.getHeight()+(float) Math.ceil(85 * metrics.density));
         } else {
             scroll.animate().translationY(0);
+            buttons.animate().translationY(0);
         }
     }
 }
