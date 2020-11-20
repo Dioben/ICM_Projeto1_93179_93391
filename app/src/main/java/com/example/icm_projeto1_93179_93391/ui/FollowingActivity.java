@@ -86,7 +86,7 @@ public class FollowingActivity extends AppCompatActivity implements OnMapReadyCa
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_tracking);
+        setContentView(R.layout.activity_following);
         Toolbar myToolbar = (Toolbar) findViewById(R.id.course_toolbar);
         setSupportActionBar(myToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -153,12 +153,10 @@ public class FollowingActivity extends AppCompatActivity implements OnMapReadyCa
 
     private void ActualStartTracking() {
         Button btn = findViewById(R.id.start_button);
-        btn.setText("Stop");
         comp = new CourseComparison(og,course);
         mLocationCallback = new LocationCallback() {
             @Override
             public void onLocationResult(LocationResult locationResult) {
-                // If tracking is turned on, reverse geocode into an address
                 if (isrecording) {
                     new CourseCompareTask(comp,FollowingActivity.this)
                             .execute(locationResult.getLastLocation());
