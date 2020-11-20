@@ -30,10 +30,12 @@ import android.widget.ToggleButton;
 
 import androidx.appcompat.widget.Toolbar;
 
+import com.example.icm_projeto1_93179_93391.CourseCompareTask;
 import com.example.icm_projeto1_93179_93391.ExtractOGTask;
 import com.example.icm_projeto1_93179_93391.R;
 import com.example.icm_projeto1_93179_93391.UpdateCourseTask;
 import com.example.icm_projeto1_93179_93391.datamodel.Course;
+import com.example.icm_projeto1_93179_93391.datamodel.CourseComparison;
 import com.example.icm_projeto1_93179_93391.datamodel.CourseNode;
 import com.example.icm_projeto1_93179_93391.network.CourseSubmitListener;
 import com.example.icm_projeto1_93179_93391.network.FirebaseQueryClient;
@@ -52,6 +54,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
@@ -65,7 +68,7 @@ import java.util.List;
 
 import static android.util.Log.i;
 
-public class FollowingActivity extends AppCompatActivity implements OnMapReadyCallback, MapUpdater, CourseSubmitListener,OnLatLngExtract {
+public class FollowingActivity extends AppCompatActivity implements OnMapReadyCallback, CompareMapUpdater, CourseSubmitListener,OnLatLngExtract {
     private Course course;
     private Course og;
     private boolean isrecording;
@@ -77,6 +80,9 @@ public class FollowingActivity extends AppCompatActivity implements OnMapReadyCa
     public Marker firstmarker;
     public Marker lastmarker;
     boolean submit;
+    boolean haserror;
+    Location start;
+    CourseComparison comp;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,100 +99,84 @@ public class FollowingActivity extends AppCompatActivity implements OnMapReadyCa
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         Intent origin = getIntent();
         og = origin.getParcelableExtra("course");
+        start = og.getNodes().get(0).toLocation();
 
     }
 
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
-        mMap.setMaxZoomPreference(18);
-        mMap.setMinZoomPreference(10);
 
-        pathline = mMap.addPolyline(new PolylineOptions().color(Color.RED));
-        new ExtractOGTask(this).execute(og);
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
-        mFusedLocationClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
-            @Override
-            public void onSuccess(Location location) {
-                if (location != null) {
-                    LatLng place = new LatLng(location.getLatitude(), location.getLongitude());
-                    mMap.moveCamera(CameraUpdateFactory.newLatLng(place));
-                }
-            }
-        });
-    }
+
 
 
     private void startRecording() {
-        if (mMap==null){isrecording=false;Toast.makeText(this,
+        if (mMap==null){Toast.makeText(this,
                 "Please retry after map initializes",
                 Toast.LENGTH_SHORT).show(); return;}
-        Toast.makeText(this,"Starting tracking...",Toast.LENGTH_LONG).show();
-        if (lastmarker!=null){lastmarker.remove();lastmarker=null;}
-        if (firstmarker!=null){firstmarker.remove();}
+
+
         if (course==null){
             FirebaseUser usr = FirebaseAuth.getInstance().getCurrentUser();
-            course = new Course(usr.getDisplayName(),usr.getUid(),false);
+            course = new Course(usr.getDisplayName(),og.getCourse_id(),true);
         }
+
         if (ActivityCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]
                             {Manifest.permission.ACCESS_FINE_LOCATION},
                     REQUEST_LOCATION_PERMISSION);
-        } else {
-            Button btn = findViewById(R.id.start_button);
-            btn.setText("Stop");
-            mLocationCallback = new LocationCallback() {
+        }
+        else {
+            Toast.makeText(this,"Checking Starting Point...",Toast.LENGTH_LONG).show();
+            mFusedLocationClient.getLastLocation().addOnSuccessListener(
+                    new OnSuccessListener<Location>() {
+                        @Override
+                        public void onSuccess(Location location) {
+                            if (location.distanceTo(start)<250) {
+                                ActualStartTracking();
+                                course.append_node(new CourseNode(location));
+                                FollowingActivity.this.initMapPath(new LatLng(location.getLatitude(),location.getLongitude()));
+                            }
+                            else{
+                                Toast.makeText(getApplication(),"You must be within 250m of starting point to start,current distance: "+location.distanceTo(start),Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    }
+            ).addOnFailureListener(new OnFailureListener() {
                 @Override
-                public void onLocationResult(LocationResult locationResult) {
-                    // If tracking is turned on, reverse geocode into an address
-                    if (isrecording) {
-                        new UpdateCourseTask(course,FollowingActivity.this)
-                                .execute(locationResult.getLastLocation());}
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(getApplication(),"Could not find your location",Toast.LENGTH_SHORT).show();
                 }
-            };
-            mFusedLocationClient.requestLocationUpdates
-                    (getLocationRequest(), mLocationCallback,
-                            null /* Looper */);
+            });
+
         }
     }
 
-
-
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case REQUEST_LOCATION_PERMISSION:
-                // If the permission is granted, get the location,
-                // otherwise, show a Toast
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    startRecording();
-                } else {
-                    Toast.makeText(this,
-                            R.string.location_permission_denied,
-                            Toast.LENGTH_SHORT).show();
+    private void ActualStartTracking() {
+        Button btn = findViewById(R.id.start_button);
+        btn.setText("Stop");
+        comp = new CourseComparison(og,course);
+        mLocationCallback = new LocationCallback() {
+            @Override
+            public void onLocationResult(LocationResult locationResult) {
+                // If tracking is turned on, reverse geocode into an address
+                if (isrecording) {
+                    new CourseCompareTask(comp,FollowingActivity.this)
+                            .execute(locationResult.getLastLocation());
                 }
-                break;
+            }
+        };
+        if (ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]
+                            {Manifest.permission.ACCESS_FINE_LOCATION},
+                    REQUEST_LOCATION_PERMISSION);
         }
-    }
-
-    @Override
-    protected void onDestroy() {
-        if (mLocationCallback!=null){
-            mFusedLocationClient.removeLocationUpdates(mLocationCallback);}
-        super.onDestroy();
+        mFusedLocationClient.requestLocationUpdates
+                (getLocationRequest(), mLocationCallback,
+                        null /* Looper */);
+        Toast.makeText(getApplication(),"Starting tracking...",Toast.LENGTH_LONG).show();
+        isrecording=true;
     }
 
 
@@ -208,21 +198,35 @@ public class FollowingActivity extends AppCompatActivity implements OnMapReadyCa
         updateData();
     }
 
+    @Override
+    public void onUpdateError(String errorstring, Location spot) {
+    if (!haserror){
+        haserror=true;
+        mMap.addMarker(new MarkerOptions().title(errorstring).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)));
+        Toast.makeText(this,"Divergence Detected",Toast.LENGTH_SHORT).show();
+    }
+    }
 
 
-
-
-
-
-
-
-
-
-
-
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) { //TODO:PROBABLY ADD IN CAMERA SUPPORT
+            case REQUEST_LOCATION_PERMISSION:
+                // If the permission is granted, get the location,
+                // otherwise, show a Toast
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    startRecording();
+                } else {
+                    Toast.makeText(this,
+                            R.string.location_permission_denied,
+                            Toast.LENGTH_SHORT).show();
+                }
+                break;
+        }
+    }
     public void upload_button_onClick(View view) {
 
-        if (!isrecording){isrecording=true;startRecording();return;}
+        if (!isrecording){startRecording();return;}
         course.finalize();
         LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
         View popupView = inflater.inflate(R.layout.activity_tracking_popup, null);
@@ -271,33 +275,15 @@ public class FollowingActivity extends AppCompatActivity implements OnMapReadyCa
         popupWindow.showAtLocation(findViewById(R.id.course_layout), Gravity.CENTER, 0, 0);
     }
 
-    public void updateData(){
-        TextView datacontainer = findViewById(R.id.course_data);
-        String data ="\nData:\n\n";
-        if (course!=null){
-            List<CourseNode> nodes = course.getNodes();
-            if (nodes.size()>0){
-                double runtime = nodes.get(nodes.size()-1).getTime_stamp() - nodes.get(0).getTime_stamp();
-                runtime/=1e9;//->seconds
-                String rt ="";
-                if (runtime>3600){int hours =(int) runtime/3600;
-                    rt+= hours+":";
-                    runtime-=hours*3600;
-                }
-                int mins = (int) runtime/60;
-                rt+=mins +":";
-                runtime-=60*mins;
-                int seconds = (int)runtime;
-                rt+=seconds;
 
-                data +="Running for "+rt+"\nTravelled "+course.formattedTrack_length()+"\n";
-                data+="Max Speed: "+course.formattedMax_speed()+"\n";
-                data+="Nodes: "+nodes.size();
 
-            }
-        }
-        datacontainer.setText(data);
-    }
+
+
+
+
+
+
+
 
 
 
@@ -316,17 +302,6 @@ public class FollowingActivity extends AppCompatActivity implements OnMapReadyCa
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         return locationRequest;
     }
-
-
-
-
-
-
-
-
-
-
-
 
 
     public void fullcourse_data_button_onClick(View view) {
@@ -370,5 +345,63 @@ public class FollowingActivity extends AppCompatActivity implements OnMapReadyCa
         Toast.makeText(this,"Submission Failed",Toast.LENGTH_LONG).show();
         submit=false;
 
+    }
+
+    public void updateData(){
+        TextView datacontainer = findViewById(R.id.course_data);
+        String data ="\nData:\n\n";
+        if (course!=null){
+            List<CourseNode> nodes = course.getNodes();
+            if (nodes.size()>0){
+                double runtime = nodes.get(nodes.size()-1).getTime_stamp() - nodes.get(0).getTime_stamp();
+                runtime/=1e9;//->seconds
+                String rt ="";
+                if (runtime>3600){int hours =(int) runtime/3600;
+                    rt+= hours+":";
+                    runtime-=hours*3600;
+                }
+                int mins = (int) runtime/60;
+                rt+=mins +":";
+                runtime-=60*mins;
+                int seconds = (int)runtime;
+                rt+=seconds;
+
+                data +="Running for "+rt+"\nTravelled "+course.formattedTrack_length()+"\n";
+                data+="Max Speed: "+course.formattedMax_speed()+"\n";
+                data+="Nodes: "+nodes.size();
+
+            }
+        }
+        datacontainer.setText(data);
+    }
+
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+        mMap.setMaxZoomPreference(18);
+        mMap.setMinZoomPreference(10);
+
+        pathline = mMap.addPolyline(new PolylineOptions().color(Color.RED));
+        new ExtractOGTask(this).execute(og);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        mFusedLocationClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(Location location) {
+                if (location != null) {
+                    LatLng place = new LatLng(location.getLatitude(), location.getLongitude());
+                    mMap.moveCamera(CameraUpdateFactory.newLatLng(place));
+                }
+            }
+        });
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (mLocationCallback!=null){
+            mFusedLocationClient.removeLocationUpdates(mLocationCallback);}
+        super.onDestroy();
     }
 }
