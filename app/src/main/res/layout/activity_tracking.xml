@@ -41,46 +41,159 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minHeight="200dp"
+        android:minHeight="85dp"
         app:layout_constraintTop_toBottomOf="@id/map"
         android:id="@+id/course_data_scrollview"
         android:background="?android:colorBackground">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/course_data"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:text="Travelled:"
+                    android:gravity="left"
+                    android:layout_weight="1"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="#858585"
+                    />
+                <TextView
+                    android:id="@+id/course_data_travelled"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:text="Unknown"
+                    android:gravity="right"
+                    android:layout_weight="1"
+                    android:textSize="18sp"
+                    />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.4"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="8dp"
-                android:text="\nData: "
-                android:textSize="24sp"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintHorizontal_chainStyle="spread_inside"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toLeftOf="@id/fullcourse_data_button"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:layout_marginBottom="16dp">
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:background="?attr/colorPrimary"
+                    android:layout_weight="2"/>
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="0.4"/>
+            </LinearLayout>
 
-            <ToggleButton
-                android:id="@+id/fullcourse_data_button"
-                android:layout_width="88dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginRight="16dp"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintLeft_toRightOf="@id/course_data"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:onClick="fullcourse_data_button_onClick">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:text="Runtime:"
+                    android:gravity="left"
+                    android:layout_weight="1"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="#858585"
+                    />
+                <TextView
+                    android:id="@+id/course_data_runtime"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:text="Unknown"
+                    android:gravity="right"
+                    android:layout_weight="1"
+                    android:textSize="18sp"
+                    />
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="?attr/colorPrimary"
+                android:layout_marginBottom="16dp"/>
 
-            </ToggleButton>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:text="Max Speed:"
+                    android:gravity="left"
+                    android:layout_weight="1"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="#858585"
+                    />
+                <TextView
+                    android:id="@+id/course_data_max_speed"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:text="Unknown"
+                    android:gravity="right"
+                    android:layout_weight="1"
+                    android:textSize="18sp"
+                    />
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="?attr/colorPrimary"
+                android:layout_marginBottom="16dp"/>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:text="Nodes:"
+                    android:gravity="left"
+                    android:layout_weight="1"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="#858585"
+                    />
+                <TextView
+                    android:id="@+id/course_data_nodes"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:text="Unknown"
+                    android:gravity="right"
+                    android:layout_weight="1"
+                    android:textSize="18sp"
+                    />
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="?attr/colorPrimary"/>
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
     </ScrollView>
 
+    <ToggleButton
+        android:id="@+id/fullcourse_data_button"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginBottom="58dp"
+        android:layout_marginRight="16dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:onClick="fullcourse_data_button_onClick"
+        android:background="@drawable/full_info_button_selector">
+
+    </ToggleButton>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

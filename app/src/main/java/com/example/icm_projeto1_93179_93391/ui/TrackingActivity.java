@@ -12,6 +12,9 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.ImageSpan;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
@@ -81,6 +84,17 @@ public class TrackingActivity extends AppCompatActivity implements OnMapReadyCal
         setSupportActionBar(myToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        ToggleButton info_button = findViewById(R.id.fullcourse_data_button);
+        ImageSpan imageSpan = new ImageSpan(this, android.R.drawable.arrow_up_float);
+        SpannableString content = new SpannableString("X");
+        content.setSpan(imageSpan, 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        info_button.setText(content);
+        info_button.setTextOff(content);
+        imageSpan = new ImageSpan(this, android.R.drawable.arrow_down_float);
+        content = new SpannableString("X");
+        content.setSpan(imageSpan, 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        info_button.setTextOn(content);
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -302,7 +316,11 @@ public class TrackingActivity extends AppCompatActivity implements OnMapReadyCal
     }
 
     public void updateData(){
-        TextView datacontainer = findViewById(R.id.course_data);
+        TextView travelled_info = findViewById(R.id.course_data_travelled);
+        TextView runtime_info = findViewById(R.id.course_data_runtime);
+        TextView max_speed_info = findViewById(R.id.course_data_max_speed);
+        TextView nodes_info = findViewById(R.id.course_data_nodes);
+
         String data ="\nData:\n\n";
         if (course!=null){
             List<CourseNode> nodes = course.getNodes();
@@ -320,13 +338,13 @@ public class TrackingActivity extends AppCompatActivity implements OnMapReadyCal
                 int seconds = (int)runtime;
                 rt+=seconds;
 
-                data +="Running for "+rt+"\nTravelled "+course.formattedTrack_length()+"\n";
-                data+="Max Speed: "+course.formattedMax_speed()+"\n";
-                data+="Nodes: "+nodes.size();
+                travelled_info.setText(course.formattedTrack_length());
+                runtime_info.setText(rt);
+                max_speed_info.setText(course.formattedMax_speed());
+                nodes_info.setText(String.valueOf(nodes.size()));
 
             }
         }
-        datacontainer.setText(data);
     }
 
 
@@ -339,8 +357,10 @@ public class TrackingActivity extends AppCompatActivity implements OnMapReadyCal
 
         if (button.isChecked()){
             scroll.animate().translationY(-scroll.getHeight()+(float) Math.ceil(85 * metrics.density));
+            button.animate().translationY(-scroll.getHeight()+(float) Math.ceil(85 * metrics.density));
         } else {
             scroll.animate().translationY(0);
+            button.animate().translationY(0);
         }
     }
 }

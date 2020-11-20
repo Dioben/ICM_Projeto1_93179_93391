@@ -22,14 +22,12 @@ public class UserStatsActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        text = findViewById(R.id.user_info_text);
-        String t = "";
-        t+="Name: "+user.getUsername()+"\n"
-        +"\nTop Score: "+user.getTop_rating()
-                +"\nTrack Count: "+user.getCoursecount()
-        +"\nTotal track length: "+ String.format("%.3f km",user.getTotal_tracklength())
-        +"\nTotal Runtime: "+user.formattedRuntime()
-        +"\nAverage Speed: "+String.format("%.3f km/h",user.getAvg_speed());
-        text.setText(t);
+        ((TextView) findViewById(R.id.user_name)).setText(user.getUsername());
+        ((TextView) findViewById(R.id.user_top_score)).setText(String.valueOf(user.getTop_rating()));
+        ((TextView) findViewById(R.id.user_track_count)).setText(String.valueOf(user.getCoursecount()));
+        ((TextView) findViewById(R.id.user_total_track_length)).setText(String.format("%.3f km",user.getTotal_tracklength()));
+        ((TextView) findViewById(R.id.user_total_runtime)).setText(user.formattedRuntime());
+        ((TextView) findViewById(R.id.user_average_speed)).setText(String.format("%.3f km/h",user.getAvg_speed()));
+
     }
 }
