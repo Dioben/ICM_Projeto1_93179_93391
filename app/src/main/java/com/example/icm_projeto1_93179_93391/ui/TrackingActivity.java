@@ -51,6 +51,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
@@ -80,10 +81,6 @@ public class TrackingActivity extends AppCompatActivity implements OnMapReadyCal
         setSupportActionBar(myToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-//        ScrollView sv = findViewById(R.id.course_data_scrollview);
-//        ConstraintLayout sl = findViewById(R.id.course_layout);
-//        sv.getLayoutParams().height = (int) sl.getHeight()/2;
-//        sl.requestLayout();
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -271,13 +268,29 @@ public class TrackingActivity extends AppCompatActivity implements OnMapReadyCal
         confirm_upload_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                TextInputLayout namebox = popupView.findViewById(R.id.course_name_box);
+                MaterialButton private_button = popupView.findViewById(R.id.privacy_private_button);
+                MaterialButton public_button = popupView.findViewById(R.id.privacy_public_button);
+                TextView privacy_error = popupView.findViewById(R.id.privacy_button_bar_error);
+                namebox.setErrorEnabled(false);
+                privacy_error.setVisibility(View.GONE);
+                if ((namebox.getEditText().getText().toString().trim().isEmpty())||(!(private_button.isChecked() || public_button.isChecked()))) {
+                    if (namebox.getEditText().getText().toString().trim().isEmpty()) {
+                        namebox.setError("Name field cannot be empty");
+                        namebox.setErrorEnabled(true);
+                    }
+                    if (!(private_button.isChecked() || public_button.isChecked())) {
+                        privacy_error.setVisibility(View.VISIBLE);
+                    }
+                    return;
+                }
+
                 if (!submit){
                     if (course.getNodes().size()<10){Toast.makeText(getApplication(),"Course is too short",Toast.LENGTH_LONG).show();return;}
                     submit=true;
                     course.finalize();
                     CheckBox box = popupView.findViewById(R.id.anonymous_checkbox);
                     if (box.isChecked()) course.anon=true;
-                    TextInputLayout namebox = popupView.findViewById(R.id.course_name_box);
                     course.name=namebox.getEditText().getText().toString();
                     Toast.makeText(getApplication(),"Submitting course...",Toast.LENGTH_SHORT).show();
                     save(null);}
