@@ -271,5 +271,30 @@ public class FirebaseQueryClient {
 
     }
 
+    public void getOtherRuns(Course course,CourseQueryListener listener){
+        fetcher.whereEqualTo("course_id",course.getCourse_id()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                LinkedList<Course> courses= new LinkedList<>();
+                String uid = course.getuID();
+                long ts = course.getTimestamp();
+                for (DocumentSnapshot snap: queryDocumentSnapshots.getDocuments()){
+                    Course toadd = snap.toObject(Course.class);
+                    if (toadd.getuID()!=uid || toadd.getTimestamp()!=ts) //not the same course
+                        courses.add(toadd);
+                }
+                listener.onCourseListing(courses);
+            }
+        }).addOnFailureListener(
+                new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        listener.onCourseListingFail();
+                    }
+                }
+        );
+
+    }
+
 
 }
