@@ -165,7 +165,7 @@ public class CourseListActivity extends AppCompatActivity implements CourseQuery
 
     @Override
     public void onCourseListing(LinkedList<Course> list) {
-        mAdapter = new CourseAdapter(getApplicationContext(), list, this);
+        mAdapter = new CourseAdapter(CourseListActivity.this, list, this);
         courselist.setAdapter(mAdapter);
     }
 
