@@ -23,6 +23,7 @@
             android:layout_marginRight="8dp"
             android:onClick="upload_button_onClick"
             android:id="@+id/record_button"
+            android:textAllCaps="false"
             android:background="@drawable/start_button_selector"
             />
 
@@ -192,6 +193,7 @@
         android:id="@+id/course_buttons">
 
         <Button
+            android:textAllCaps="false"
             android:id="@+id/camera_button"
             android:layout_width="40dp"
             android:layout_height="40dp"
@@ -202,6 +204,7 @@
             />
 
         <ToggleButton
+            android:textAllCaps="false"
             android:id="@+id/fullcourse_data_button"
             android:layout_width="48dp"
             android:layout_height="48dp"
