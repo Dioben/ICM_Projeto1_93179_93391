@@ -201,6 +201,7 @@
             android:background="@drawable/full_info_button_selector"
             android:layout_marginBottom="8dp"
             android:padding="0dp"
+            android:onClick="cameraButton"
             />
 
         <ToggleButton

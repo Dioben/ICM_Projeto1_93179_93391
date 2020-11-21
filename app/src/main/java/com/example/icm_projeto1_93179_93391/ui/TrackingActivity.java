@@ -1,6 +1,7 @@
 package com.example.icm_projeto1_93179_93391.ui;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,7 +12,10 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ImageSpan;
@@ -32,6 +36,7 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.FileProvider;
 
 import com.example.icm_projeto1_93179_93391.R;
 import com.example.icm_projeto1_93179_93391.UpdateCourseTask;
@@ -39,6 +44,7 @@ import com.example.icm_projeto1_93179_93391.datamodel.Course;
 import com.example.icm_projeto1_93179_93391.datamodel.CourseNode;
 import com.example.icm_projeto1_93179_93391.network.CourseSubmitListener;
 import com.example.icm_projeto1_93179_93391.network.FirebaseQueryClient;
+import com.example.icm_projeto1_93179_93391.network.ImagePostListener;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -60,12 +66,15 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.io.File;
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.List;
 
 import static android.util.Log.i;
 
-public class TrackingActivity extends AppCompatActivity implements OnMapReadyCallback, MapUpdater, CourseSubmitListener {
+public class TrackingActivity extends AppCompatActivity implements OnMapReadyCallback, MapUpdater, CourseSubmitListener, ImagePostListener {
+    private static final int TAKE_PICTURE = 2;
     private Course course;
     private boolean isrecording;
     public GoogleMap mMap;
@@ -76,6 +85,8 @@ public class TrackingActivity extends AppCompatActivity implements OnMapReadyCal
     public Marker firstmarker;
     public Marker lastmarker;
     boolean submit;
+    private String currentPhotoPath;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -124,15 +135,9 @@ public class TrackingActivity extends AppCompatActivity implements OnMapReadyCal
 
     }
 
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
+
+
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
@@ -141,13 +146,6 @@ public class TrackingActivity extends AppCompatActivity implements OnMapReadyCal
         pathline = mMap.addPolyline(new PolylineOptions().color(Color.RED));
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
             return;
         }
         mFusedLocationClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
@@ -160,6 +158,8 @@ public class TrackingActivity extends AppCompatActivity implements OnMapReadyCal
             }
         });
     }
+
+
 
 
     private void startRecording() {
@@ -192,6 +192,64 @@ public class TrackingActivity extends AppCompatActivity implements OnMapReadyCal
     }
 
 
+
+
+
+
+    public void cameraButton(View view){
+        if (course==null){
+            Toast.makeText(this,"Please start a track first",Toast.LENGTH_LONG).show(); return;
+        }
+        Intent cameraI = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+        // Ensure that there's a camera activity to handle the intent
+        if (cameraI.resolveActivity(getPackageManager()) != null) {
+            // Create the File where the photo should go
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+                Toast.makeText(this,"Failed to Create Picture File",Toast.LENGTH_LONG).show();
+            }
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+                Uri photoURI = FileProvider.getUriForFile(this,
+                        "com.example.android.fileprovider",
+                        photoFile);
+                cameraI.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityForResult(cameraI,TAKE_PICTURE);
+            }
+        }
+
+    }
+
+    private File createImageFile() throws IOException {
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        String filename = "cycling"+FirebaseAuth.getInstance().getCurrentUser().getUid()+System.currentTimeMillis()+"_";
+        File ret = File.createTempFile(filename,".png",storageDir);
+        currentPhotoPath = ret.getAbsolutePath();
+        return ret;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        try {
+            super.onActivityResult(requestCode, resultCode, data);
+            if (requestCode == TAKE_PICTURE) {
+            if (resultCode == RESULT_OK) {
+
+                FirebaseQueryClient.getInstance().postImage(currentPhotoPath,course,this);
+
+                }
+            if (resultCode==RESULT_CANCELED){
+                new File(currentPhotoPath).delete();
+            }
+
+
+            }
+        }catch (Exception ex){
+            Toast.makeText(this,"Something went wrong: "+ ex.toString(),Toast.LENGTH_LONG).show();
+        }
+    }
 
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
@@ -378,5 +436,15 @@ public class TrackingActivity extends AppCompatActivity implements OnMapReadyCal
             scroll.animate().translationY(0);
             buttons.animate().translationY(0);
         }
+    }
+
+    @Override
+    public void OnPostSucess() {
+    Toast.makeText(this,"Image Posted",Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void OnPostFail() {
+        Toast.makeText(this,"Image Post Failed",Toast.LENGTH_SHORT).show();
     }
 }

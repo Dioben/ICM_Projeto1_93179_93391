@@ -1,5 +1,6 @@
 package com.example.icm_projeto1_93179_93391.network;
 
+import android.net.Uri;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -21,11 +22,15 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.core.QueryListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import org.checkerframework.checker.nullness.compatqual.NullableDecl;
 
+import java.io.File;
 import java.lang.reflect.Type;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -38,11 +43,47 @@ public class FirebaseQueryClient {
     private static  User user;
     private static DocumentReference userUpstream;
     private static CollectionReference userCourses;
+    private static StorageReference imagefolder;
     private FirebaseQueryClient() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         fetcher = db.collection("courses");
-        
+        imagefolder = FirebaseStorage.getInstance().getReference("images");
     }
+
+    public void postImage(String name,Course course,ImagePostListener listener){
+        Uri file = Uri.fromFile(new File(name));
+        StorageReference imageRef = imagefolder.child(file.getLastPathSegment());
+        imageRef.putFile(file).addOnFailureListener(
+                new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        listener.OnPostFail();
+                    }
+                }
+        ).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                taskSnapshot.getMetadata().getReference().getDownloadUrl().addOnSuccessListener(
+                        new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                Log.i("uri",uri.getPath()+ " - "+ uri.toString());
+                                course.appendPicture(uri.toString());
+                                listener.OnPostSucess();
+                            }
+                        }
+                );
+            }
+        })
+        ;
+    }
+
+
+
+
+
+
+
     public void setUser(FirebaseUser user){
         userUpstream= FirebaseFirestore.getInstance().collection("users").document(user.getUid());
         userCourses = FirebaseFirestore.getInstance().collection("privatecourses").document("mandatory").collection(user.getUid());
