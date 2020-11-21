@@ -3,7 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:id="@+id/course_item">
+    android:id="@+id/course_item"
+    android:layout_marginLeft="16dp"
+    android:layout_marginRight="16dp">
 
     <LinearLayout
         android:layout_width="match_parent"

@@ -50,6 +50,8 @@ public class CourseListActivity extends AppCompatActivity implements CourseQuery
         courselist = findViewById(R.id.course_list);
         client = FirebaseQueryClient.getInstance();
 
+        getSupportActionBar().setElevation(20);
+
 
         if (ActivityCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION)

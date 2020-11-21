@@ -335,6 +335,7 @@ public class FollowingActivity extends AppCompatActivity implements OnMapReadyCa
         }
     }
     public void upload_button_onClick(View view) {
+        ((ToggleButton) findViewById(R.id.record_button)).setChecked(true);
 
         if (!isrecording){startRecording();return;}
         course.finalize();
