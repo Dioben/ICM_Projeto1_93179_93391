@@ -235,4 +235,8 @@ public class Course implements Parcelable {
     public void setPictures(List<String> pictures) {
         this.pictures = pictures;
     }
+
+    public void appendPicture(String pic){
+        pictures.add(pic);
+    }
 }
