@@ -1,6 +1,7 @@
 package com.example.icm_projeto1_93179_93391.ui;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,7 +12,13 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.ImageSpan;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
@@ -29,6 +36,7 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.FileProvider;
 
 import com.example.icm_projeto1_93179_93391.CourseCompareTask;
 import com.example.icm_projeto1_93179_93391.ExtractOGTask;
@@ -39,6 +47,7 @@ import com.example.icm_projeto1_93179_93391.datamodel.CourseComparison;
 import com.example.icm_projeto1_93179_93391.datamodel.CourseNode;
 import com.example.icm_projeto1_93179_93391.network.CourseSubmitListener;
 import com.example.icm_projeto1_93179_93391.network.FirebaseQueryClient;
+import com.example.icm_projeto1_93179_93391.network.ImagePostListener;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -62,13 +71,16 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.io.File;
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 import static android.util.Log.i;
 
-public class FollowingActivity extends AppCompatActivity implements OnMapReadyCallback, CompareMapUpdater, CourseSubmitListener,OnLatLngExtract {
+public class FollowingActivity extends AppCompatActivity implements OnMapReadyCallback, CompareMapUpdater, CourseSubmitListener,OnLatLngExtract, ImagePostListener {
+    private static final int TAKE_PICTURE = 2;
     private Course course;
     private Course og;
     private boolean isrecording;
@@ -83,16 +95,47 @@ public class FollowingActivity extends AppCompatActivity implements OnMapReadyCa
     boolean haserror;
     Location start;
     CourseComparison comp;
+    private String currentPhotoPath;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_following);
+        setContentView(R.layout.activity_tracking);
         Toolbar myToolbar = (Toolbar) findViewById(R.id.course_toolbar);
         setSupportActionBar(myToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         myToolbar.setNavigationOnClickListener(view ->this.onBackPressed());
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+        ToggleButton info_button = findViewById(R.id.fullcourse_data_button);
+        ImageSpan imageSpan = new ImageSpan(this, R.drawable.ic_baseline_arrow_drop_up_24);
+        SpannableString content = new SpannableString("X");
+        content.setSpan(imageSpan, 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        info_button.setText(content);
+        info_button.setTextOff(content);
+        imageSpan = new ImageSpan(this, R.drawable.ic_baseline_arrow_drop_down_24);
+        content = new SpannableString("X");
+        content.setSpan(imageSpan, 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        info_button.setTextOn(content);
+
+
+        ToggleButton record_button = findViewById(R.id.record_button);
+        imageSpan = new ImageSpan(this, R.drawable.ic_baseline_play_arrow_24);
+        content = new SpannableString("X");
+        content.setSpan(imageSpan, 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        record_button.setText(content);
+        record_button.setTextOff(content);
+        imageSpan = new ImageSpan(this, R.drawable.ic_baseline_stop_24);
+        content = new SpannableString("X");
+        content.setSpan(imageSpan, 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        record_button.setTextOn(content);
+
+        Button camera_button = findViewById(R.id.camera_button);
+        imageSpan = new ImageSpan(this, R.drawable.ic_baseline_photo_camera_24);
+        content = new SpannableString("X");
+        content.setSpan(imageSpan, 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        camera_button.setText(content);
+
+
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -102,6 +145,71 @@ public class FollowingActivity extends AppCompatActivity implements OnMapReadyCa
         start = og.getNodes().get(0).toLocation();
 
     }
+
+
+    public void cameraButton(View view){
+        if (course==null){
+            Toast.makeText(this,"Please start a track first",Toast.LENGTH_LONG).show(); return;
+        }
+        Intent cameraI = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+        // Ensure that there's a camera activity to handle the intent
+        if (cameraI.resolveActivity(getPackageManager()) != null) {
+            // Create the File where the photo should go
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+                Toast.makeText(this,"Failed to Create Picture File",Toast.LENGTH_LONG).show();
+            }
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+                Uri photoURI = FileProvider.getUriForFile(this,
+                        "com.example.android.fileprovider",
+                        photoFile);
+                cameraI.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityForResult(cameraI,TAKE_PICTURE);
+            }
+        }
+
+    }
+    private File createImageFile() throws IOException {
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        String filename = "cycling"+FirebaseAuth.getInstance().getCurrentUser().getUid()+System.currentTimeMillis()+"_";
+        File ret = File.createTempFile(filename,".png",storageDir);
+        currentPhotoPath = ret.getAbsolutePath();
+        return ret;
+    }
+
+
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        try {
+            super.onActivityResult(requestCode, resultCode, data);
+            if (requestCode == TAKE_PICTURE) {
+                if (resultCode == RESULT_OK) {
+
+                    FirebaseQueryClient.getInstance().postImage(currentPhotoPath,course,this);
+
+                }
+                if (resultCode==RESULT_CANCELED){
+                    new File(currentPhotoPath).delete();
+                }
+
+
+            }
+        }catch (Exception ex){
+            Toast.makeText(this,"Something went wrong: "+ ex.toString(),Toast.LENGTH_LONG).show();
+        }
+    }
+
+
+
+
+
+
+
 
     @Override
     public void onBackPressed() {
@@ -157,7 +265,6 @@ public class FollowingActivity extends AppCompatActivity implements OnMapReadyCa
     }
 
     private void ActualStartTracking() {
-        Button btn = findViewById(R.id.start_button);
         comp = new CourseComparison(og,course);
         mLocationCallback = new LocationCallback() {
             @Override
@@ -268,6 +375,8 @@ public class FollowingActivity extends AppCompatActivity implements OnMapReadyCa
                     course.finalize();
                     CheckBox box = popupView.findViewById(R.id.anonymous_checkbox);
                     if (box.isChecked()) course.anon=true;
+                    if (private_button.isChecked())course.isprivate=true;
+                    else{course.isprivate=false;}
                     course.name=namebox.getEditText().getText().toString();
                     Toast.makeText(getApplication(),"Submitting course...",Toast.LENGTH_SHORT).show();
                     save(null);}
@@ -310,14 +419,17 @@ public class FollowingActivity extends AppCompatActivity implements OnMapReadyCa
     public void fullcourse_data_button_onClick(View view) {
         ToggleButton button = (ToggleButton) view;
         ScrollView scroll = findViewById(R.id.course_data_scrollview);
+        LinearLayout buttons = findViewById(R.id.course_buttons);
 
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
         if (button.isChecked()){
             scroll.animate().translationY(-scroll.getHeight()+(float) Math.ceil(85 * metrics.density));
+            buttons.animate().translationY(-scroll.getHeight()+(float) Math.ceil(85 * metrics.density));
         } else {
             scroll.animate().translationY(0);
+            buttons.animate().translationY(0);
         }
     }
 
@@ -351,7 +463,11 @@ public class FollowingActivity extends AppCompatActivity implements OnMapReadyCa
     }
 
     public void updateData(){
-        TextView datacontainer = findViewById(R.id.course_data);
+        TextView travelled_info = findViewById(R.id.course_data_travelled);
+        TextView runtime_info = findViewById(R.id.course_data_runtime);
+        TextView max_speed_info = findViewById(R.id.course_data_max_speed);
+        TextView nodes_info = findViewById(R.id.course_data_nodes);
+
         String data ="\nData:\n\n";
         if (course!=null){
             List<CourseNode> nodes = course.getNodes();
@@ -369,13 +485,13 @@ public class FollowingActivity extends AppCompatActivity implements OnMapReadyCa
                 int seconds = (int)runtime;
                 rt+=seconds;
 
-                data +="Running for "+rt+"\nTravelled "+course.formattedTrack_length()+"\n";
-                data+="Max Speed: "+course.formattedMax_speed()+"\n";
-                data+="Nodes: "+nodes.size();
+                travelled_info.setText(course.formattedTrack_length());
+                runtime_info.setText(rt);
+                max_speed_info.setText(course.formattedMax_speed());
+                nodes_info.setText(String.valueOf(nodes.size()));
 
             }
         }
-        datacontainer.setText(data);
     }
 
 
@@ -406,5 +522,16 @@ public class FollowingActivity extends AppCompatActivity implements OnMapReadyCa
         if (mLocationCallback!=null){
             mFusedLocationClient.removeLocationUpdates(mLocationCallback);}
         super.onDestroy();
+    }
+
+
+    @Override
+    public void OnPostSucess() {
+        Toast.makeText(this,"Image Posted",Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void OnPostFail() {
+        Toast.makeText(this,"Image Post Failed",Toast.LENGTH_SHORT).show();
     }
 }
