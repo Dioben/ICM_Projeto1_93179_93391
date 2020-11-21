@@ -18,6 +18,7 @@ public class Course implements Parcelable {
     private String uID;
     private double  track_length;
     private List<CourseNode> nodes;
+    private List<String> pictures;
     private double max_speed; //no min cuz that'll probably be 0 when the user stops
     private double avg_speed;
     private int rating;
@@ -34,6 +35,7 @@ public class Course implements Parcelable {
         this.course_id=uID;
         nodes = new ArrayList<>();
         iscopy= copy;
+        pictures = new ArrayList<>();
         this.uID = FirebaseAuth.getInstance().getCurrentUser().getUid();
     }
 
@@ -42,6 +44,7 @@ public class Course implements Parcelable {
         this.course_id=uID;
         nodes = new ArrayList<>();
         this.uID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        pictures = new ArrayList<>();
     }
 
     protected Course(Parcel in) {
@@ -51,6 +54,7 @@ public class Course implements Parcelable {
         uID = in.readString();
         track_length = in.readDouble();
         nodes = in.createTypedArrayList(CourseNode.CREATOR);
+        pictures = in.createStringArrayList();
         max_speed = in.readDouble();
         avg_speed = in.readDouble();
         rating = in.readInt();
@@ -71,6 +75,7 @@ public class Course implements Parcelable {
         dest.writeString(uID);
         dest.writeDouble(track_length);
         dest.writeTypedList(nodes);
+        dest.writeStringList(pictures);
         dest.writeDouble(max_speed);
         dest.writeDouble(avg_speed);
         dest.writeInt(rating);
@@ -221,5 +226,13 @@ public class Course implements Parcelable {
 
     public double getLon() {
         return lon;
+    }
+
+    public List<String> getPictures() {
+        return pictures;
+    }
+
+    public void setPictures(List<String> pictures) {
+        this.pictures = pictures;
     }
 }
