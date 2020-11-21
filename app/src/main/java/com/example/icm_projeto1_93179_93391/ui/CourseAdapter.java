@@ -29,7 +29,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
     @NonNull
     @Override
     public CourseViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View mItemView = mInflater.inflate(R.layout.course_sort_item, parent, false);
+        View mItemView = mInflater.inflate(R.layout.course_list_item, parent, false);
         return new CourseViewHolder(mItemView, this);
     }
 
