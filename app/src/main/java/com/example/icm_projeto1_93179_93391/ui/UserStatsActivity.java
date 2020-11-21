@@ -17,6 +17,7 @@ public class UserStatsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_stats);
         user = FirebaseQueryClient.getInstance().getUser();
+        getSupportActionBar().setElevation(20);
     }
 
     @Override

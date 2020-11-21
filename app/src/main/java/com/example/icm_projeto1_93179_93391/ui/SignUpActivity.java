@@ -34,6 +34,8 @@ public class SignUpActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
         auth = FirebaseAuth.getInstance();
+
+        getSupportActionBar().setElevation(20);
     }
 
     public void signbutton_onClick(View view) {
