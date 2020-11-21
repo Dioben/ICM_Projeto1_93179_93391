@@ -378,6 +378,8 @@ public class TrackingActivity extends AppCompatActivity implements OnMapReadyCal
                     course.finalize();
                     CheckBox box = popupView.findViewById(R.id.anonymous_checkbox);
                     if (box.isChecked()) course.anon=true;
+                    if (private_button.isChecked())course.isprivate=true;
+                    else{course.isprivate=false;}
                     course.name=namebox.getEditText().getText().toString();
                     Toast.makeText(getApplication(),"Submitting course...",Toast.LENGTH_SHORT).show();
                     save(null);}
