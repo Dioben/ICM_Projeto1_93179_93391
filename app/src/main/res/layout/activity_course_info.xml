@@ -13,11 +13,11 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="?android:colorBackground"
-        android:elevation="20px">
+        android:elevation="20dp">
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Run"
+            android:text="@string/info_start_follow_button"
             android:layout_gravity="right"
             android:layout_marginRight="8dp"
             android:onClick="run_button_onClick"
@@ -55,7 +55,7 @@
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:text="Course name:"
+                    android:text="@string/course_name_data"
                     android:gravity="left"
                     android:layout_weight="1"
                     android:textSize="18sp"
@@ -66,7 +66,7 @@
                     android:id="@+id/course_name"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:text="Unknown"
+                    android:text="@string/unknown_data"
                     android:gravity="right"
                     android:layout_weight="1"
                     android:textSize="18sp"
@@ -88,7 +88,7 @@
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:text="Owner name:"
+                    android:text="@string/owner_name_data"
                     android:gravity="left"
                     android:layout_weight="1"
                     android:textSize="18sp"
@@ -99,7 +99,7 @@
                     android:id="@+id/owner_name"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:text="Unknown"
+                    android:text="@string/unknown_data"
                     android:gravity="right"
                     android:layout_weight="1"
                     android:textSize="18sp"
@@ -121,7 +121,7 @@
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:text="Date uploaded:"
+                    android:text="@string/date_uploaded_data"
                     android:gravity="left"
                     android:layout_weight="1"
                     android:textSize="18sp"
@@ -132,7 +132,7 @@
                     android:id="@+id/date_uploaded"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:text="Unknown"
+                    android:text="@string/unknown_data"
                     android:gravity="right"
                     android:layout_weight="1"
                     android:textSize="18sp"
@@ -154,7 +154,7 @@
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:text="Rating:"
+                    android:text="@string/length_data"
                     android:gravity="left"
                     android:layout_weight="1"
                     android:textSize="18sp"
@@ -162,10 +162,10 @@
                     android:textColor="#858585"
                     />
                 <TextView
-                    android:id="@+id/rating"
+                    android:id="@+id/length"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:text="Unknown"
+                    android:text="@string/unknown_data"
                     android:gravity="right"
                     android:layout_weight="1"
                     android:textSize="18sp"
@@ -179,12 +179,197 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"/>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:text="@string/runtime_data"
+                    android:gravity="left"
+                    android:layout_weight="1"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="#858585"
+                    />
+                <TextView
+                    android:id="@+id/runtime"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:text="@string/unknown_data"
+                    android:gravity="right"
+                    android:layout_weight="1"
+                    android:textSize="18sp"
+                    />
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="?attr/colorPrimary"
+                android:layout_marginBottom="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:text="@string/rating_data"
+                    android:gravity="left"
+                    android:layout_weight="1"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="#858585"
+                    />
+                <TextView
+                    android:id="@+id/rating"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:text="@string/unknown_data"
+                    android:gravity="right"
+                    android:layout_weight="1"
+                    android:textSize="18sp"
+                    />
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="?attr/colorPrimary"
+                android:layout_marginBottom="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:text="@string/distance_data"
+                    android:gravity="left"
+                    android:layout_weight="1"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="#858585"
+                    />
+                <TextView
+                    android:id="@+id/distance"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:text="@string/unknown_data"
+                    android:gravity="right"
+                    android:layout_weight="1"
+                    android:textSize="18sp"
+                    />
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="?attr/colorPrimary"
+                android:layout_marginBottom="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:text="@string/max_speed_data"
+                    android:gravity="left"
+                    android:layout_weight="1"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="#858585"
+                    />
+                <TextView
+                    android:id="@+id/max_speed"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:text="@string/unknown_data"
+                    android:gravity="right"
+                    android:layout_weight="1"
+                    android:textSize="18sp"
+                    />
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="?attr/colorPrimary"
+                android:layout_marginBottom="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:text="@string/avg_speed_data"
+                    android:gravity="left"
+                    android:layout_weight="1"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="#858585"
+                    />
+                <TextView
+                    android:id="@+id/avg_speed"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:text="@string/unknown_data"
+                    android:gravity="right"
+                    android:layout_weight="1"
+                    android:textSize="18sp"
+                    />
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="?attr/colorPrimary"
+                android:layout_marginBottom="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"/>
+
+            <androidx.appcompat.widget.Toolbar
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?android:colorBackground"
+                android:elevation="20px"
+                android:layout_marginRight="16dp"
+                android:layout_marginLeft="16dp"
+                android:padding="0dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/copy_courses_title"
+                    android:textSize="20sp"
+                    />
+            </androidx.appcompat.widget.Toolbar>
+
             <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginLeft="16dp"
                 android:id="@+id/course_copy_list"
-                android:nestedScrollingEnabled="false"/>
+                android:nestedScrollingEnabled="false"
+                android:background="@drawable/course_list_border"/>
 
         </LinearLayout>
 

@@ -4,8 +4,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:id="@+id/course_item"
-    android:layout_marginLeft="16dp"
-    android:layout_marginRight="16dp">
+    android:padding="8dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -15,7 +14,7 @@
         <TextView
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:text="Course name:"
+            android:text="@string/course_name_data"
             android:gravity="left"
             android:layout_weight="1"
             android:textSize="18sp"
@@ -26,7 +25,7 @@
             android:id="@+id/course_name"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:text="Unknown"
+            android:text="@string/unknown_data"
             android:gravity="right"
             android:layout_weight="1"
             android:textSize="18sp"
@@ -35,7 +34,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="?attr/colorSecondary"
+        android:background="?attr/colorPrimary"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"/>
 
@@ -47,7 +46,7 @@
         <TextView
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:text="Owner name:"
+            android:text="@string/owner_name_data"
             android:gravity="left"
             android:layout_weight="1"
             android:textSize="18sp"
@@ -58,7 +57,7 @@
             android:id="@+id/owner_name"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:text="Unknown"
+            android:text="@string/unknown_data"
             android:gravity="right"
             android:layout_weight="1"
             android:textSize="18sp"
@@ -67,7 +66,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="?attr/colorSecondary"
+        android:background="?attr/colorPrimary"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"/>
 
@@ -79,7 +78,7 @@
         <TextView
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:text="Date uploaded:"
+            android:text="@string/date_uploaded_data"
             android:gravity="left"
             android:layout_weight="1"
             android:textSize="18sp"
@@ -90,23 +89,145 @@
             android:id="@+id/date_uploaded"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:text="Unknown"
+            android:text="@string/unknown_data"
             android:gravity="right"
             android:layout_weight="1"
             android:textSize="18sp"
             />
     </LinearLayout>
-    <!--<View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="?attr/colorSecondary"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"/>-->
-
     <View
         android:layout_width="match_parent"
-        android:layout_height="4dp"
-        android:layout_marginBottom="16dp"
-        android:background="?attr/colorPrimary"/>
+        android:layout_height="1dp"
+        android:background="?attr/colorPrimary"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:text="@string/length_data"
+            android:gravity="left"
+            android:layout_weight="1"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#858585"
+            />
+        <TextView
+            android:id="@+id/course_length"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:text="@string/unknown_data"
+            android:gravity="right"
+            android:layout_weight="1"
+            android:textSize="18sp"
+            />
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?attr/colorPrimary"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:text="@string/runtime_data"
+            android:gravity="left"
+            android:layout_weight="1"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#858585"
+            />
+        <TextView
+            android:id="@+id/course_runtime"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:text="@string/unknown_data"
+            android:gravity="right"
+            android:layout_weight="1"
+            android:textSize="18sp"
+            />
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?attr/colorPrimary"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:text="@string/rating_data"
+            android:gravity="left"
+            android:layout_weight="1"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#858585"
+            />
+        <TextView
+            android:id="@+id/course_rating"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:text="@string/unknown_data"
+            android:gravity="right"
+            android:layout_weight="1"
+            android:textSize="18sp"
+            />
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?attr/colorPrimary"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:text="@string/distance_data"
+            android:gravity="left"
+            android:layout_weight="1"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#858585"
+            />
+        <TextView
+            android:id="@+id/course_distance"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:text="@string/unknown_data"
+            android:gravity="right"
+            android:layout_weight="1"
+            android:textSize="18sp"
+            />
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?attr/colorPrimary"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"/>
 
 </LinearLayout>

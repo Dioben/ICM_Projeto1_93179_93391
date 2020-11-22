@@ -135,7 +135,7 @@ public class Course implements Parcelable {
     }
 
     public String formattedRuntime() {//probably reformat worthy, try the thing above maybe idk
-        double rt = runtime/1e+9/3600;
+        double rt = runtime/1e+9;
         String ret ="";
         if (rt>3600){int hours =(int) rt/3600;
             ret+= hours+":";

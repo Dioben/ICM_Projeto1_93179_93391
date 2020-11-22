@@ -7,4 +7,11 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="grey_table_even">#1A515151</color>
+    <color name="grey_table_odd">#1AFFFFFF</color>
+    <color name="green_200">#AFFC86</color>
+    <color name="green_500">#18EE00</color>
+    <color name="green_700">#21B300</color>
+    <color name="yellow_200">#CCDA03</color>
+    <color name="yellow_700">#838701</color>
 </resources>

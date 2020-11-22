@@ -29,9 +29,7 @@
 
     </androidx.appcompat.widget.Toolbar>
 
-    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        xmlns:map="http://schemas.android.com/apk/res-auto"
+    <fragment 
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/map"
@@ -60,7 +58,7 @@
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:text="Travelled:"
+                    android:text="@string/length_data"
                     android:gravity="left"
                     android:layout_weight="1"
                     android:textSize="18sp"
@@ -71,7 +69,7 @@
                     android:id="@+id/course_data_travelled"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:text="Unknown"
+                    android:text="@string/unknown_data"
                     android:gravity="right"
                     android:layout_weight="1"
                     android:textSize="18sp"
@@ -100,7 +98,7 @@
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:text="Runtime:"
+                    android:text="@string/runtime_data"
                     android:gravity="left"
                     android:layout_weight="1"
                     android:textSize="18sp"
@@ -111,7 +109,7 @@
                     android:id="@+id/course_data_runtime"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:text="Unknown"
+                    android:text="@string/unknown_data"
                     android:gravity="right"
                     android:layout_weight="1"
                     android:textSize="18sp"
@@ -129,7 +127,7 @@
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:text="Max Speed:"
+                    android:text="@string/max_speed_data"
                     android:gravity="left"
                     android:layout_weight="1"
                     android:textSize="18sp"
@@ -140,7 +138,7 @@
                     android:id="@+id/course_data_max_speed"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:text="Unknown"
+                    android:text="@string/unknown_data"
                     android:gravity="right"
                     android:layout_weight="1"
                     android:textSize="18sp"
@@ -158,7 +156,7 @@
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:text="Nodes:"
+                    android:text="@string/avg_speed_data"
                     android:gravity="left"
                     android:layout_weight="1"
                     android:textSize="18sp"
@@ -166,10 +164,10 @@
                     android:textColor="#858585"
                     />
                 <TextView
-                    android:id="@+id/course_data_nodes"
+                    android:id="@+id/course_data_avg_speed"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:text="Unknown"
+                    android:text="@string/unknown"
                     android:gravity="right"
                     android:layout_weight="1"
                     android:textSize="18sp"

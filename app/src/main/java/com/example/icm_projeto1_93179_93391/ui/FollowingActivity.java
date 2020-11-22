@@ -2,12 +2,10 @@ package com.example.icm_projeto1_93179_93391.ui;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.Manifest;
-import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -23,9 +21,7 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
@@ -41,7 +37,6 @@ import androidx.core.content.FileProvider;
 import com.example.icm_projeto1_93179_93391.CourseCompareTask;
 import com.example.icm_projeto1_93179_93391.ExtractOGTask;
 import com.example.icm_projeto1_93179_93391.R;
-import com.example.icm_projeto1_93179_93391.UpdateCourseTask;
 import com.example.icm_projeto1_93179_93391.datamodel.Course;
 import com.example.icm_projeto1_93179_93391.datamodel.CourseComparison;
 import com.example.icm_projeto1_93179_93391.datamodel.CourseNode;
@@ -66,15 +61,12 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.button.MaterialButton;
-import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.List;
 
 import static android.util.Log.i;
@@ -474,7 +466,7 @@ public class FollowingActivity extends AppCompatActivity implements OnMapReadyCa
         Toast.makeText(this,"Course Submitted",Toast.LENGTH_LONG).show();
         Log.i("this",this.toString());
 
-        Intent ret = new Intent(this,main_menu.class);
+        Intent ret = new Intent(this, MainMenuActivity.class);
         startActivity(ret);
     }
 
@@ -490,7 +482,7 @@ public class FollowingActivity extends AppCompatActivity implements OnMapReadyCa
         TextView travelled_info = findViewById(R.id.course_data_travelled);
         TextView runtime_info = findViewById(R.id.course_data_runtime);
         TextView max_speed_info = findViewById(R.id.course_data_max_speed);
-        TextView nodes_info = findViewById(R.id.course_data_nodes);
+        TextView avg_speed_info = findViewById(R.id.course_data_avg_speed);
 
         String data ="\nData:\n\n";
         if (course!=null){
@@ -510,9 +502,9 @@ public class FollowingActivity extends AppCompatActivity implements OnMapReadyCa
                 rt+=seconds;
 
                 travelled_info.setText(course.formattedTrack_length());
-                runtime_info.setText(rt);
+                runtime_info.setText(rt+" min");
                 max_speed_info.setText(course.formattedMax_speed());
-                nodes_info.setText(String.valueOf(nodes.size()));
+                avg_speed_info.setText(String.valueOf(course.formattedAvg_speed()));
 
             }
         }

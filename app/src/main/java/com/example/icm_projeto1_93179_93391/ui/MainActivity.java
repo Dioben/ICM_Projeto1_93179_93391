@@ -29,7 +29,6 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthEmailException;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
@@ -57,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (usr!=null){
             FirebaseQueryClient.getInstance().setUser(usr);
-            Intent skip = new Intent(this,main_menu.class);
+            Intent skip = new Intent(this, MainMenuActivity.class);
             startActivity(skip);
         }
         super.onStart();
@@ -93,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
             public void onSuccess(AuthResult authResult) {
                 //Toast.makeText(getApplication(),"Logged in",Toast.LENGTH_SHORT).show();
                 FirebaseQueryClient.getInstance().setUser(authResult.getUser());
-                Intent start = new Intent(getApplication(),main_menu.class);
+                Intent start = new Intent(getApplication(), MainMenuActivity.class);
                 startActivity(start);
             }
         }).addOnFailureListener(new OnFailureListener() {
@@ -156,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
                         if(!authResult.getAdditionalUserInfo().isNewUser()){
                             //Toast.makeText(getApplication(),"Signed in with Google",Toast.LENGTH_SHORT).show();
                             FirebaseQueryClient.getInstance().setUser(authResult.getUser());
-                            Intent main = new Intent(getApplication(),main_menu.class);
+                            Intent main = new Intent(getApplication(), MainMenuActivity.class);
                             startActivity(main);
                             return;
                         }
@@ -204,7 +203,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(Void aVoid) {
                         FirebaseQueryClient.getInstance().setUser(auth.getCurrentUser());
-                        Intent start = new Intent(getApplication(),main_menu.class);
+                        Intent start = new Intent(getApplication(), MainMenuActivity.class);
                         startActivity(start);
                     }
                 });

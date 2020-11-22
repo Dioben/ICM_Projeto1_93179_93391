@@ -11,7 +11,7 @@ import com.example.icm_projeto1_93179_93391.R;
 import com.google.firebase.FirebaseApiNotAvailableException;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class main_menu extends AppCompatActivity {
+public class MainMenuActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
