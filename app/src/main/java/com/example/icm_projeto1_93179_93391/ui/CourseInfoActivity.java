@@ -5,6 +5,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.Manifest;
 import android.content.Intent;
@@ -71,6 +72,15 @@ public class CourseInfoActivity extends AppCompatActivity implements CourseQuery
         client = FirebaseQueryClient.getInstance();
         client.getOtherRuns(course, CourseInfoActivity.this);
 
+        SwipeRefreshLayout course_info_container = findViewById(R.id.course_info_container);
+
+        course_info_container.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                client.getOtherRuns(course, CourseInfoActivity.this);
+                course_info_container.setRefreshing(false);
+            }
+        });
     }
 
     @Override
@@ -79,6 +89,8 @@ public class CourseInfoActivity extends AppCompatActivity implements CourseQuery
         ((TextView)findViewById(R.id.course_name)).setText(course.getName());
         if (!course.anon)
             ((TextView)findViewById(R.id.owner_name)).setText(course.getUser());
+        else
+            ((TextView)findViewById(R.id.owner_name)).setText(R.string.anonymous_text);
         ((TextView)findViewById(R.id.date_uploaded)).setText(DateUtils.getRelativeTimeSpanString(course.getTimestamp(), Calendar.getInstance().getTimeInMillis(), DateUtils.MINUTE_IN_MILLIS));
 
         ((TextView)findViewById(R.id.length)).setText(course.formattedTrack_length());

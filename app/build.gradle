@@ -47,6 +47,7 @@ dependencies {
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
     implementation 'com.synnapps:carouselview:0.1.5'
     implementation 'com.squareup.picasso:picasso:2.71828'
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.0.0'
 
     //json2class
     implementation 'com.squareup.retrofit2:converter-gson:2.8.1'
