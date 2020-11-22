@@ -126,7 +126,6 @@ public class TrackingActivity extends AppCompatActivity implements OnMapReadyCal
         camera_button.setText(content);
 
 
-
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -134,8 +133,6 @@ public class TrackingActivity extends AppCompatActivity implements OnMapReadyCal
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
     }
-
-
 
 
     @Override
@@ -160,7 +157,29 @@ public class TrackingActivity extends AppCompatActivity implements OnMapReadyCal
     }
 
 
-
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        if (isrecording) {
+            mFusedLocationClient.removeLocationUpdates(mLocationCallback);
+            mLocationCallback = new LocationCallback() {
+                @Override
+                public void onLocationResult(LocationResult locationResult) {
+                    // If tracking is turned on, reverse geocode into an address
+                    if (isrecording) {
+                        new UpdateCourseTask(course, TrackingActivity.this)
+                                .execute(locationResult.getLastLocation());
+                    }
+                }
+            };
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                return;
+            }
+            mFusedLocationClient.requestLocationUpdates
+                    (getLocationRequest(), mLocationCallback,
+                            null /* Looper */);
+        }
+    }
 
     private void startRecording() {
         if (mMap==null){isrecording=false;Toast.makeText(this,
