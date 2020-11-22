@@ -147,6 +147,29 @@ public class FollowingActivity extends AppCompatActivity implements OnMapReadyCa
     }
 
 
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        if (isrecording) {
+            mFusedLocationClient.removeLocationUpdates(mLocationCallback);
+            mLocationCallback = new LocationCallback() {
+                @Override
+                public void onLocationResult(LocationResult locationResult) {
+                    if (isrecording) {
+                        new CourseCompareTask(comp,FollowingActivity.this)
+                                .execute(locationResult.getLastLocation());
+                    }
+                }
+            };
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                return;
+            }
+            mFusedLocationClient.requestLocationUpdates
+                    (getLocationRequest(), mLocationCallback,
+                            null /* Looper */);
+        }
+    }
+
     public void cameraButton(View view){
         if (course==null){
             Toast.makeText(this,"Please start a track first",Toast.LENGTH_LONG).show(); return;
