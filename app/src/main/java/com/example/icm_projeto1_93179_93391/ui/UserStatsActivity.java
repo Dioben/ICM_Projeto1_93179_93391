@@ -1,6 +1,7 @@
 package com.example.icm_projeto1_93179_93391.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.os.Bundle;
 import android.widget.TextView;
@@ -17,7 +18,11 @@ public class UserStatsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_stats);
         user = FirebaseQueryClient.getInstance().getUser();
-        getSupportActionBar().setElevation(20);
+
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.course_toolbar);
+        setSupportActionBar(myToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
     }
 
     @Override
