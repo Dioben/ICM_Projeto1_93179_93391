@@ -36,12 +36,12 @@
         <activity
             android:name=".ui.CourseListActivity"
             android:label="Courses"
-            android:parentActivityName=".ui.main_menu"
+            android:parentActivityName=".ui.MainMenuActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.UserStatsActivity"
             android:label="@string/title_activity_user_stats"
-            android:parentActivityName=".ui.main_menu"
+            android:parentActivityName=".ui.MainMenuActivity"
             android:screenOrientation="portrait" />
         <activity android:name=".ui.UsernamePopupActivity" />
         <activity
@@ -65,13 +65,13 @@
         <activity
             android:name=".ui.TrackingActivity"
             android:label="@string/title_activity_tracking"
-            android:parentActivityName=".ui.main_menu"
+            android:parentActivityName=".ui.MainMenuActivity"
             android:screenOrientation="portrait"
             android:theme="@style/NoActionBarTheme.ICM_Projeto1_93179_93391">
 
         </activity>
         <activity
-            android:name=".ui.main_menu"
+            android:name=".ui.MainMenuActivity"
             android:screenOrientation="portrait"
             android:theme="@style/NoActionBarTheme.ICM_Projeto1_93179_93391">
 

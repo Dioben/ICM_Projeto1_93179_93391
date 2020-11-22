@@ -16,13 +16,13 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         android:textSize="18sp"
-        android:text="First time login.\nPlease insert username:"/>
+        android:text="@string/first_time_login_text"/>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/user_name_box"
         android:layout_width="268dp"
         android:layout_height="wrap_content"
-        android:hint="Username:"
+        android:hint="@string/username_hint"
         app:layout_constraintTop_toBottomOf="@+id/servicesignpopup_text"
         app:layout_constraintLeft_toLeftOf="parent"
         android:layout_marginTop="16dp">
@@ -39,7 +39,7 @@
         android:id="@+id/confirm_username_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Confirm"
+        android:text="@string/confirm_button"
         app:layout_constraintTop_toBottomOf="@id/user_name_box"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"

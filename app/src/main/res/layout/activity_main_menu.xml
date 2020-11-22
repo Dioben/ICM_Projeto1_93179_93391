@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.main_menu">
+    tools:context=".ui.MainMenuActivity">
 
     <Button
         android:id="@+id/logoutbutton"
@@ -14,7 +14,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="4dp"
-        android:text="Logout"
+        android:text="@string/logout_button"
         android:textSize="8sp"
         android:onClick="logoutbutton_onClick"/>
 
@@ -25,12 +25,12 @@
         android:layout_marginStart="50dp"
         android:layout_marginTop="50dp"
         android:layout_marginEnd="50dp"
-        android:text="App Name"
+        android:text="@string/app_title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/menu_buttons"
-        android:textSize="30dp"
+        android:textSize="30sp"
         android:gravity="center"/>
 
     <LinearLayout
@@ -50,7 +50,7 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:id="@+id/free_play"
-            android:text="Free Play"
+            android:text="@string/tracking_button"
             android:layout_margin="16dp"
             android:onClick="free_play_onClick"/>
 
@@ -59,7 +59,7 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:id="@+id/courses"
-            android:text="Courses"
+            android:text="@string/courses_list_button"
             android:layout_margin="16dp"
             android:onClick="courses_onClick"/>
 
@@ -68,7 +68,7 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:id="@+id/user_stats"
-            android:text="User Stats"
+            android:text="@string/user_stats_button"
             android:layout_margin="16dp"
             android:onClick="user_stats_onClick"/>
 

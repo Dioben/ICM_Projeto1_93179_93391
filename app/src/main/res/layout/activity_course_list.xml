@@ -6,12 +6,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.CourseListActivity"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="8dp">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="16dp">
+        android:layout_height="wrap_content">
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/owner_dropdown_parent"
@@ -48,7 +48,8 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/course_list"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@drawable/course_list_border">
 
     </androidx.recyclerview.widget.RecyclerView>
 

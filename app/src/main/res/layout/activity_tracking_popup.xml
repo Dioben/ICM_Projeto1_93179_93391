@@ -14,7 +14,7 @@
         android:id="@+id/course_name_box"
         android:layout_width="268dp"
         android:layout_height="wrap_content"
-        android:hint="Course name:"
+        android:hint="@string/course_name_hint"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent">
         <!-- width is 268 because match_parent wasn't working-->
@@ -40,7 +40,7 @@
             android:id="@+id/privacy_private_button"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Private"
+            android:text="@string/private_button"
             style="?attr/materialButtonOutlinedStyle"
             android:layout_weight="1"/>
 <!--        <Button-->
@@ -54,7 +54,7 @@
             android:id="@+id/privacy_public_button"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Public"
+            android:text="@string/public_button"
             style="?attr/materialButtonOutlinedStyle"
             android:layout_weight="1"/>
     </com.google.android.material.button.MaterialButtonToggleGroup>
@@ -65,7 +65,7 @@
         app:layout_constraintTop_toBottomOf="@id/privacy_button_bar"
         android:textColor="?attr/colorError"
         android:textAppearance="?attr/textAppearanceCaption"
-        android:text="Must select one"
+        android:text="@string/radio_error"
         android:visibility="gone"
         android:layout_marginTop="-4dp">
     </TextView>
@@ -75,7 +75,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:checked="false"
-        android:text="Anonymous"
+        android:text="@string/anonymous_text"
         android:buttonTint="?attr/colorPrimary"
         app:layout_constraintTop_toBottomOf="@id/privacy_button_bar_error"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -97,7 +97,7 @@
         android:id="@+id/confirm_upload_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Confirm"
+        android:text="@string/confirm_button"
         app:layout_constraintTop_toBottomOf="@id/anonymous_checkbox"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"/>

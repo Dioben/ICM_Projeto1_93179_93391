@@ -149,7 +149,7 @@ public class CourseListActivity extends AppCompatActivity implements CourseQuery
 
         dropdown1.addTextChangedListener(myWatcher);
 
-        String[] sorts = new String[]{"Date uploaded", "Rating"};
+        String[] sorts = new String[]{"Date", "Rating"};
         adapter = new ArrayAdapter<>(this, R.layout.course_sort_item, sorts);
         dropdown2 = findViewById(R.id.sort_dropdown);
         dropdown2.setAdapter(adapter);
