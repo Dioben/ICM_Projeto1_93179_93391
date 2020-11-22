@@ -2,6 +2,7 @@ package com.example.icm_projeto1_93179_93391.ui;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -33,7 +34,10 @@ public class SignUpActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sign_up);
         auth = FirebaseAuth.getInstance();
 
-        getSupportActionBar().setElevation(20);
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.course_toolbar);
+        setSupportActionBar(myToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
     }
 
     public void signbutton_onClick(View view) {

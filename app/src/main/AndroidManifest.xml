@@ -7,7 +7,7 @@
          location permissions for the "MyLocation" functionality.
     -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -21,34 +21,41 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ICM_Projeto1_93179_93391">
         <activity
+            android:name=".ui.SettingsActivity"
+            android:parentActivityName=".ui.MainMenuActivity"
+            android:label="@string/settingsactivity"
+            android:theme="@style/NoActionBarTheme.ICM_Projeto1_93179_93391" />
+        <activity
             android:name=".ui.FollowingActivity"
-            android:label="Course"
+            android:label="@string/followingactivity"
             android:parentActivityName=".ui.CourseInfoActivity"
             android:screenOrientation="portrait"
             android:theme="@style/NoActionBarTheme.ICM_Projeto1_93179_93391" />
         <activity
             android:name=".ui.CourseInfoActivity"
-            android:label="Course info"
+            android:label="@string/courseinfoactivity"
             android:parentActivityName=".ui.CourseListActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/NoActionBarTheme.ICM_Projeto1_93179_93391">
-        </activity>
+            android:theme="@style/NoActionBarTheme.ICM_Projeto1_93179_93391" />
         <activity
             android:name=".ui.CourseListActivity"
-            android:label="Courses"
+            android:label="@string/courselistactivity"
             android:parentActivityName=".ui.MainMenuActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/NoActionBarTheme.ICM_Projeto1_93179_93391" />
         <activity
             android:name=".ui.UserStatsActivity"
             android:label="@string/title_activity_user_stats"
             android:parentActivityName=".ui.MainMenuActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/NoActionBarTheme.ICM_Projeto1_93179_93391" />
         <activity android:name=".ui.UsernamePopupActivity" />
         <activity
             android:name=".ui.SignUpActivity"
             android:label="@string/title_activity_signup"
             android:parentActivityName=".ui.MainActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/NoActionBarTheme.ICM_Projeto1_93179_93391" />
         <activity android:name=".ui.TrackingPopupActivity" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -64,30 +71,24 @@
 
         <activity
             android:name=".ui.TrackingActivity"
-            android:label="@string/title_activity_tracking"
+            android:label="@string/trackingactivity"
             android:parentActivityName=".ui.MainMenuActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/NoActionBarTheme.ICM_Projeto1_93179_93391">
-
-        </activity>
+            android:theme="@style/NoActionBarTheme.ICM_Projeto1_93179_93391" />
         <activity
             android:name=".ui.MainMenuActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/NoActionBarTheme.ICM_Projeto1_93179_93391">
-
-        </activity>
+            android:theme="@style/NoActionBarTheme.ICM_Projeto1_93179_93391" />
         <activity
             android:name=".ui.MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/NoActionBarTheme.ICM_Projeto1_93179_93391">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -96,7 +97,7 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths"></meta-data>
+                android:resource="@xml/file_paths" />
         </provider>
     </application>
 

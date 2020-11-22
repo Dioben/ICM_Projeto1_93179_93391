@@ -2,6 +2,7 @@ package com.example.icm_projeto1_93179_93391.ui;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -51,7 +52,10 @@ public class CourseListActivity extends AppCompatActivity implements CourseQuery
         courselist = findViewById(R.id.course_list);
         client = FirebaseQueryClient.getInstance();
 
-        getSupportActionBar().setElevation(20);
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.course_toolbar);
+        setSupportActionBar(myToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
 
         if (ActivityCompat.checkSelfPermission(this,

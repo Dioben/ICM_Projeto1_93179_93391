@@ -7,14 +7,15 @@
     android:layout_width="match_parent"
     tools:context=".ui.TrackingActivity"
     android:id="@+id/course_layout">
-    <androidx.appcompat.widget.Toolbar
 
+    <androidx.appcompat.widget.Toolbar
         android:id="@+id/course_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="?android:colorBackground"
         app:layout_constraintTop_toTopOf="parent"
-        android:elevation="4dp">
+        android:elevation="4dp"
+        app:titleTextAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
 
         <ToggleButton
             android:layout_width="40dp"
@@ -29,7 +30,7 @@
 
     </androidx.appcompat.widget.Toolbar>
 
-    <fragment 
+    <fragment
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/map"

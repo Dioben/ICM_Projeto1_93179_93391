@@ -1,7 +1,6 @@
 <resources>
     <string name="app_name">ICM_Projeto1_93179_93391</string>
     <string name="app_title">Tracking App</string>
-    <string name="title_activity_tracking">Free Play</string>
     <string name="location_permission_denied">Permission Denied</string>
     <string name="title_activity_signup">Sign Up</string>
     <string name="title_activity_user_stats">User stats</string>
@@ -13,7 +12,7 @@
     <string name="sign_up_button">Sign Up</string>
     <string name="username_hint">Username:</string>
     <string name="confirm_password_hint">Confirm password:</string>
-    <string name="info_start_follow_button">Run</string>
+    <string name="info_start_follow_button">Open</string>
     <string name="course_name_data">Track name:</string>
     <string name="owner_name_data">Runner name:</string>
     <string name="unknown_data">Unknown</string>
@@ -26,7 +25,7 @@
     <string name="avg_speed_data">Average speed:</string>
     <string name="copy_courses_title">Runs on this track:</string>
     <string name="logout_button">Logout</string>
-    <string name="tracking_button">Free Play</string>
+    <string name="tracking_button">Free Run</string>
     <string name="courses_list_button">Tracks</string>
     <string name="user_stats_button">User Stats</string>
     <string name="unknown">Unknown</string>
@@ -42,4 +41,11 @@
     <string name="total_track_length_data">Total track length:</string>
     <string name="total_runtime_data">Total Runtime:</string>
     <string name="first_time_login_text">First time login.\nPlease insert username:</string>
+    <string name="courselistactivity">Tracks</string>
+    <string name="courseinfoactivity">Track info</string>
+    <string name="followingactivity">Tracking</string>
+    <string name="trackingactivity">Free Run</string>
+    <string name="settings_button">Settings</string>
+    <string name="settingsactivity">Settings</string>
+    <string name="theme_switch">Night mode</string>
 </resources>
