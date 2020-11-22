@@ -66,6 +66,8 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
         holder.course_name.setText(current.name);
         if (!current.anon)
             holder.owner_name.setText(current.getUser());
+        else
+            holder.owner_name.setText(R.string.anonymous_text);
         holder.date_uploaded.setText(DateUtils.getRelativeTimeSpanString(current.getTimestamp(), Calendar.getInstance().getTimeInMillis(), DateUtils.MINUTE_IN_MILLIS));
         holder.course_length.setText(current.formattedTrack_length());
         holder.course_runtime.setText(String.valueOf(current.formattedRuntime())+" min");
@@ -95,6 +97,16 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
     @Override
     public int getItemCount() {
         return courses.size();
+    }
+
+    public void clear() {
+        courses.clear();
+        notifyDataSetChanged();
+    }
+
+    public void addAll(List<Course> list) {
+        courses.addAll(list);
+        notifyDataSetChanged();
     }
 
     public class CourseViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.Manifest;
 import android.content.Intent;
@@ -157,6 +158,58 @@ public class CourseListActivity extends AppCompatActivity implements CourseQuery
         dropdown2.setText(sorts[0], false);
         dropdown2.addTextChangedListener(myWatcher);
         courselist.setLayoutManager(layoutManager);
+
+        SwipeRefreshLayout course_list_container = findViewById(R.id.course_list_container);
+
+        course_list_container.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                if (coords == null) {
+                    Toast.makeText(getApplication(), "We do not know your location,cannot fetch tracks", Toast.LENGTH_LONG).show();
+
+                    if (ActivityCompat.checkSelfPermission(getApplication(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getApplication(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                        return;
+                    }
+                    locationclient.getLastLocation().addOnSuccessListener(
+                            new OnSuccessListener<Location>() {
+                                @Override
+                                public void onSuccess(Location location) {
+                                    if (location != null) {
+                                        coords = new LatLng(location.getLatitude(), location.getLongitude());
+                                        CourseListActivity.this.onLocationLoad();
+                                    } else {
+                                        Toast.makeText(getApplication(), "Failed to get user location", Toast.LENGTH_LONG).show();
+                                    }
+                                }
+                            }
+                    ).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(getApplication(), "Failed to get user location", Toast.LENGTH_LONG).show();
+                        }
+                    });
+
+
+                    return;
+                }
+                String ownvalue = dropdown1.getText().toString().trim();
+                String sortval = dropdown2.getText().toString().trim();
+                if (ownvalue.equalsIgnoreCase("me")) {
+                    if (sortval.equalsIgnoreCase("rating")) {
+                        client.getMyCoursesbyRating(CourseListActivity.this);
+                    } else {
+                        client.getMyCourses(CourseListActivity.this);
+                    }
+                } else {
+                    if (sortval.equalsIgnoreCase("rating")) {
+                        client.getTopRatedCourseNearby(coords, 30, CourseListActivity.this);
+                    } else {
+                        client.getNearbyRecent(coords, 30, CourseListActivity.this);
+                    }
+                }
+                course_list_container.setRefreshing(false);
+            }
+        });
     }
 
     private void onLocationLoad() {
