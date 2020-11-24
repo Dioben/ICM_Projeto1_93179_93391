@@ -75,17 +75,24 @@ public class User {
 
 
     public String formattedRuntime() {//probably reformat worthy, try the thing above maybe idk
-        double rt = total_runtime/1e+9/3600;
+        double rt = total_runtime/1e+9;
         String ret ="";
-        if (rt>3600){int hours =(int) rt/3600;
+        if (rt>3600) {
+            int hours =(int) rt/3600;
             ret+= hours+":";
             rt-=hours*3600;
+            int mins = (int) rt/60;
+            ret+=String.format("%02d",mins)+":";
+            rt-=60*mins;
+            int seconds = (int)rt;
+            ret+=String.format("%02d",seconds)+" h";
+        } else {
+            int mins = (int) rt/60;
+            ret+=mins +":";
+            rt-=60*mins;
+            int seconds = (int)rt;
+            ret+=String.format("%02d",seconds)+" min";
         }
-        int mins = (int) rt/60;
-        ret+=mins +":";
-        rt-=60*mins;
-        int seconds = (int)rt;
-        ret+=seconds;
         return ret;
     }
 

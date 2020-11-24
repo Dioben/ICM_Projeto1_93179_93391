@@ -111,6 +111,8 @@ public class Course implements Parcelable {
             max_speed= x.getVelocity();
         nodes.add(x);
         track_length+=x.getDistance_from_last()/1000;
+        runtime = nodes.get(nodes.size()-1).getTime_stamp() - nodes.get(0).getTime_stamp();
+        avg_speed = track_length/((runtime/1e+9)/3600);
     }
 
     public void finalize(){
@@ -120,9 +122,9 @@ public class Course implements Parcelable {
         lat = nodes.get(0).getLat();
         lon = nodes.get(0).getLon();
         timestamp = System.currentTimeMillis();
-        avg_speed = track_length/runtime/1e+9/3600;
+        avg_speed = track_length/((runtime/1e+9)/3600);
         if (! iscopy)course_id+=timestamp;
-        rating = (int)(avg_speed*runtime/1e+9/60);
+        rating = (int)((avg_speed/6)*((runtime/1e+9)/30)); // avg human walking speed is 6km/h
     }
 
     public LatLng centerMapPoint(){return nodes.get(nodes.size()/2).toLatLng();}
@@ -137,15 +139,22 @@ public class Course implements Parcelable {
     public String formattedRuntime() {//probably reformat worthy, try the thing above maybe idk
         double rt = runtime/1e+9;
         String ret ="";
-        if (rt>3600){int hours =(int) rt/3600;
+        if (rt>3600) {
+            int hours =(int) rt/3600;
             ret+= hours+":";
             rt-=hours*3600;
+            int mins = (int) rt/60;
+            ret+=String.format("%02d",mins)+":";
+            rt-=60*mins;
+            int seconds = (int)rt;
+            ret+=String.format("%02d",seconds)+" h";
+        } else {
+            int mins = (int) rt/60;
+            ret+=mins +":";
+            rt-=60*mins;
+            int seconds = (int)rt;
+            ret+=String.format("%02d",seconds)+" min";
         }
-        int mins = (int) rt/60;
-        ret+=mins +":";
-        rt-=60*mins;
-        int seconds = (int)rt;
-        ret+=seconds;
         return ret;
     }
     public String formattedTrack_length() {

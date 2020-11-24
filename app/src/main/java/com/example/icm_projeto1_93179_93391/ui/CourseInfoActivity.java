@@ -94,7 +94,7 @@ public class CourseInfoActivity extends AppCompatActivity implements CourseQuery
         ((TextView)findViewById(R.id.date_uploaded)).setText(DateUtils.getRelativeTimeSpanString(course.getTimestamp(), Calendar.getInstance().getTimeInMillis(), DateUtils.MINUTE_IN_MILLIS));
 
         ((TextView)findViewById(R.id.length)).setText(course.formattedTrack_length());
-        ((TextView)findViewById(R.id.runtime)).setText(String.valueOf(course.formattedRuntime())+" min");
+        ((TextView)findViewById(R.id.runtime)).setText(String.valueOf(course.formattedRuntime()));
         ((TextView)findViewById(R.id.rating)).setText(String.valueOf(course.getRating()));
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
@@ -136,6 +136,13 @@ public class CourseInfoActivity extends AppCompatActivity implements CourseQuery
     public void onCourseListing(LinkedList<Course> list) {
         mAdapter = new CourseAdapter(CourseInfoActivity.this, list, this);
         courselist.setAdapter(mAdapter);
+        if (mAdapter.getItemCount() == 0) {
+            findViewById(R.id.course_copy_list_toolbar).setVisibility(View.GONE);
+            findViewById(R.id.course_copy_list).setVisibility(View.GONE);
+        } else {
+            findViewById(R.id.course_copy_list_toolbar).setVisibility(View.VISIBLE);
+            findViewById(R.id.course_copy_list).setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
