@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.widget.CompoundButton;
@@ -26,8 +27,9 @@ public class SettingsActivity extends AppCompatActivity {
 
         Switch theme_switch = findViewById(R.id.theme_switch);
 
-        if (AppCompatDelegate.getDefaultNightMode() != AppCompatDelegate.MODE_NIGHT_NO)
+        if ((getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES) {
             theme_switch.setChecked(true);
+        }
 
         theme_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
