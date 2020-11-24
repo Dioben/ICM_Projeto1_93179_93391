@@ -24,6 +24,7 @@
             android:name=".ui.SettingsActivity"
             android:parentActivityName=".ui.MainMenuActivity"
             android:label="@string/settingsactivity"
+            android:screenOrientation="portrait"
             android:theme="@style/NoActionBarTheme.ICM_Projeto1_93179_93391" />
         <activity
             android:name=".ui.FollowingActivity"

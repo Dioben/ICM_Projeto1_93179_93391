@@ -413,21 +413,8 @@ public class TrackingActivity extends AppCompatActivity implements OnMapReadyCal
         if (course!=null){
             List<CourseNode> nodes = course.getNodes();
             if (nodes.size()>0){
-                double runtime = nodes.get(nodes.size()-1).getTime_stamp() - nodes.get(0).getTime_stamp();
-                runtime/=1e9;//->seconds
-                String rt ="";
-                if (runtime>3600){int hours =(int) runtime/3600;
-                                    rt+= hours+":";
-                                    runtime-=hours*3600;
-                }
-                int mins = (int) runtime/60;
-                rt+=mins +":";
-                runtime-=60*mins;
-                int seconds = (int)runtime;
-                rt+=seconds;
-
                 travelled_info.setText(course.formattedTrack_length());
-                runtime_info.setText(rt);
+                runtime_info.setText(course.formattedRuntime());
                 max_speed_info.setText(course.formattedMax_speed());
                 avg_speed_info.setText(String.valueOf(course.formattedAvg_speed()));
 

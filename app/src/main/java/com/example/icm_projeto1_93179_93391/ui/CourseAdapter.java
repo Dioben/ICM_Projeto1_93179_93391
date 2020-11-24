@@ -70,7 +70,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
             holder.owner_name.setText(R.string.anonymous_text);
         holder.date_uploaded.setText(DateUtils.getRelativeTimeSpanString(current.getTimestamp(), Calendar.getInstance().getTimeInMillis(), DateUtils.MINUTE_IN_MILLIS));
         holder.course_length.setText(current.formattedTrack_length());
-        holder.course_runtime.setText(String.valueOf(current.formattedRuntime())+" min");
+        holder.course_runtime.setText(String.valueOf(current.formattedRuntime()));
         holder.course_rating.setText(String.valueOf(current.getRating()));
         if (holder.course_distance != null) {
             if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
