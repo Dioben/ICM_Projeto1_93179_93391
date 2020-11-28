@@ -283,6 +283,9 @@ public class FollowingActivity extends AppCompatActivity implements OnMapReadyCa
     }
 
     private void ActualStartTracking() {
+        ((ToggleButton) findViewById(R.id.record_button)).setChecked(true);
+        MediaPlayer player = MediaPlayer.create(this, R.raw.recording_start);
+        player.start();
         comp = new CourseComparison(og,course);
         mLocationCallback = new LocationCallback() {
             @Override
@@ -353,14 +356,9 @@ public class FollowingActivity extends AppCompatActivity implements OnMapReadyCa
         }
     }
     public void upload_button_onClick(View view) {
+        ((ToggleButton) findViewById(R.id.record_button)).setChecked(false);
+        if (!isrecording){startRecording();return;}
         ((ToggleButton) findViewById(R.id.record_button)).setChecked(true);
-
-        if (!isrecording){
-            MediaPlayer player = MediaPlayer.create(this, R.raw.recording_start);
-            player.start();
-            startRecording();
-            return;
-        }
         course.finalize();
         LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
         View popupView = inflater.inflate(R.layout.activity_tracking_popup, null);
