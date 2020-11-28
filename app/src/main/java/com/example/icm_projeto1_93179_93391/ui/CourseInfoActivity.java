@@ -57,8 +57,8 @@ public class CourseInfoActivity extends AppCompatActivity implements CourseQuery
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         course = getIntent().getParcelableExtra("course");
         if (course==null) onBackPressed();
-        images = course.getPictures();
 
+        images = course.getPictures();
         CarouselView carouselView = findViewById(R.id.image_carousel);
         carouselView.setPageCount(images.size());
         carouselView.setImageListener(imageListener);
@@ -127,7 +127,7 @@ public class CourseInfoActivity extends AppCompatActivity implements CourseQuery
     ImageListener imageListener = new ImageListener() {
         @Override
         public void setImageForPosition(int position, ImageView imageView) {
-            Picasso.get().load(images.get(position)).into(imageView);
+            Picasso.get().load(images.get(position)).fit().centerInside().into(imageView);
             imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
         }
     };
