@@ -229,8 +229,7 @@ public class FollowingActivity extends AppCompatActivity implements OnMapReadyCa
 
     @Override
     public void onBackPressed() {
-        MediaPlayer player = MediaPlayer.create(this, R.raw.recording_stop);
-        player.start();
+        if (isrecording) MediaPlayer.create(this, R.raw.recording_stop).start();
         Intent ret = new Intent();
         ret.putExtra("course",course);
         finish();

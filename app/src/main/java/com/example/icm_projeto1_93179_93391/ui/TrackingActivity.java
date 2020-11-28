@@ -330,8 +330,7 @@ public class TrackingActivity extends AppCompatActivity implements OnMapReadyCal
 
     @Override
     public void onBackPressed() {
-        MediaPlayer player = MediaPlayer.create(this, R.raw.recording_stop);
-        player.start();
+        if (isrecording) MediaPlayer.create(this, R.raw.recording_stop).start();
         finish();
     }
 
