@@ -421,8 +421,9 @@ public class TrackingActivity extends AppCompatActivity implements OnMapReadyCal
         TextView max_speed_info = findViewById(R.id.course_data_max_speed);
         TextView avg_speed_info = findViewById(R.id.course_data_avg_speed);
 
-        String data ="\nData:\n\n";
         if (course!=null){
+            MediaPlayer player = MediaPlayer.create(this, R.raw.new_node);
+            player.start();
             List<CourseNode> nodes = course.getNodes();
             if (nodes.size()>0){
                 travelled_info.setText(course.formattedTrack_length());
