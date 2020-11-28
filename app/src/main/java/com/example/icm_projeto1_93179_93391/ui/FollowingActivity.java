@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -228,6 +229,8 @@ public class FollowingActivity extends AppCompatActivity implements OnMapReadyCa
 
     @Override
     public void onBackPressed() {
+        MediaPlayer player = MediaPlayer.create(this, R.raw.recording_stop);
+        player.start();
         Intent ret = new Intent();
         ret.putExtra("course",course);
         finish();
@@ -352,7 +355,12 @@ public class FollowingActivity extends AppCompatActivity implements OnMapReadyCa
     public void upload_button_onClick(View view) {
         ((ToggleButton) findViewById(R.id.record_button)).setChecked(true);
 
-        if (!isrecording){startRecording();return;}
+        if (!isrecording){
+            MediaPlayer player = MediaPlayer.create(this, R.raw.recording_start);
+            player.start();
+            startRecording();
+            return;
+        }
         course.finalize();
         LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
         View popupView = inflater.inflate(R.layout.activity_tracking_popup, null);
@@ -465,9 +473,7 @@ public class FollowingActivity extends AppCompatActivity implements OnMapReadyCa
     public void onCourseSubmitSuccess() {
         Toast.makeText(this,"Course Submitted",Toast.LENGTH_LONG).show();
         Log.i("this",this.toString());
-
-        Intent ret = new Intent(this, MainMenuActivity.class);
-        startActivity(ret);
+        onBackPressed();
     }
 
 
