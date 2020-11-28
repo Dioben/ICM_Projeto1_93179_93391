@@ -10,10 +10,12 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ImageSpan;
@@ -85,10 +87,12 @@ public class TrackingActivity extends AppCompatActivity implements OnMapReadyCal
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tracking);
+
         Toolbar myToolbar = (Toolbar) findViewById(R.id.course_toolbar);
         setSupportActionBar(myToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+        myToolbar.setNavigationOnClickListener(view ->this.onBackPressed());
 
         ToggleButton info_button = findViewById(R.id.fullcourse_data_button);
         ImageSpan imageSpan = new ImageSpan(this, R.drawable.ic_baseline_arrow_drop_up_24);
@@ -324,16 +328,18 @@ public class TrackingActivity extends AppCompatActivity implements OnMapReadyCal
     }
 
 
-
-
+    @Override
+    public void onBackPressed() {
+        MediaPlayer player = MediaPlayer.create(this, R.raw.recording_stop);
+        player.start();
+        finish();
+    }
 
     @Override
     public void onCourseSubmitSuccess() {
         Toast.makeText(this,"Course Submitted",Toast.LENGTH_LONG).show();
         Log.i("this",this.toString());
-
-        Intent ret = new Intent(this, MainMenuActivity.class);
-    startActivity(ret);
+        onBackPressed();
     }
 
 
@@ -352,7 +358,13 @@ public class TrackingActivity extends AppCompatActivity implements OnMapReadyCal
     public void upload_button_onClick(View view) {
         ((ToggleButton) findViewById(R.id.record_button)).setChecked(true);
 
-        if (!isrecording){isrecording=true;startRecording();return;}
+        if (!isrecording){
+            MediaPlayer player = MediaPlayer.create(this, R.raw.recording_start);
+            player.start();
+            isrecording=true;
+            startRecording();
+            return;
+        }
         course.finalize();
         LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
         View popupView = inflater.inflate(R.layout.activity_tracking_popup, null);
